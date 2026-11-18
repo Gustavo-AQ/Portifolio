@@ -20,7 +20,7 @@ Node >= 22.12. There is no test suite; `npm run build` is the gate (it validates
 
 ## Deployment
 
-`.github/workflows/deploy.yml` builds on every push/PR to `master` and deploys `dist/` to GitHub Pages on push. Repo setting **Pages → Source** must be **GitHub Actions**. `public/CNAME` keeps the custom domain.
+`.github/workflows/deploy.yml` builds on every push/PR to `master` and deploys `dist/` to GitHub Pages on push. Repo setting **Pages → Source** must be **GitHub Actions**. With Actions, GitHub ignores the `CNAME` file: the custom domain `me.gaqtech.dev` must be set in **Settings → Pages → Custom domain** (switching the source once cleared it). DNS: Cloudflare CNAME `me` → GitHub Pages, DNS only. `public/CNAME` is kept only as documentation.
 
 ## Hard Constraints
 
