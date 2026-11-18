@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://me.gaqtech.dev/sitemap-index.xml
+
+# Versão do portfólio para IA / AI-readable version
+# https://me.gaqtech.dev/llms.txt

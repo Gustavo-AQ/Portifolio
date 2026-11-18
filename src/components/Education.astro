@@ -1,0 +1,108 @@
+---
+import { Image } from 'astro:assets';
+import Icon from './Icon.astro';
+import anhanguera from '../assets/img/education/anhanguera.webp';
+import dominante from '../assets/img/education/colegio-dominante.png';
+import dio from '../assets/img/certification/dio.png';
+import type { Lang } from '../i18n/ui';
+import { useTranslations } from '../i18n/utils';
+import { education, certifications } from '../data/profile';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const logos = { anhanguera, dominante };
+---
+
+<section class="section" id="education" aria-labelledby="education-title">
+  <div class="container">
+    <div class="section-head" data-reveal>
+      <span class="kicker">{t('education.kicker')}</span>
+      <h2 class="section-title" id="education-title">{t('education.title')}</h2>
+    </div>
+
+    <div class="edu-grid">
+      {
+        education.map((e) => (
+          <article class="card edu-card" data-reveal>
+            <div class="edu-logo">
+              <Image src={logos[e.logo]} alt={e.institution} height={56} densities={[1, 2]} />
+            </div>
+            <div class="edu-body">
+              <h3>{e.degree[lang]}</h3>
+              <p class="edu-inst">{e.institution}</p>
+              <p class="edu-period">
+                {e.period[lang]}
+                {e.note && <span class="badge badge-production no-dot">{e.note[lang]}</span>}
+              </p>
+              {e.courses && (
+                <>
+                  <p class="edu-courses-title">{t('education.courses')}</p>
+                  <ul class="chip-list">
+                    {e.courses[lang].map((c) => (
+                      <li class="chip">{c}</li>
+                    ))}
+                  </ul>
+                </>
+              )}
+            </div>
+          </article>
+        ))
+      }
+    </div>
+
+    <h3 class="subhead certs-title">{t('education.certs')}</h3>
+    <ul class="certs">
+      {
+        certifications.map((c) => (
+          <li class:list={['card', 'cert', `tone-${c.tone}`]} data-reveal>
+            <span class="cert-logo">
+              <Image src={dio} alt={c.issuer} width={40} height={40} densities={[1, 2]} />
+            </span>
+            <span class="cert-body">
+              <strong>{c.name[lang]}</strong>
+              <small>{c.issuer}</small>
+            </span>
+            <a href={c.url} target="_blank" rel="noopener" class="cert-link" aria-label={`${t('education.cert.view')}: ${c.name[lang]}`}>
+              <Icon name="bx-link-external" size={18} />
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>
+
+<style>
+  .edu-grid { display: grid; gap: 14px; }
+  .edu-card { overflow: hidden; display: flex; flex-direction: column; }
+  .edu-logo { display: grid; place-items: center; padding: 18px; background: #fff; border-bottom: 1px solid var(--border); min-height: 92px; }
+  .edu-logo img { height: 56px; width: auto; max-width: 100%; object-fit: contain; }
+  .edu-body { padding: 18px 20px 20px; }
+  .edu-body h3 { font-size: 1.1rem; }
+  .edu-inst { color: var(--text-muted); margin-top: 4px; }
+  .edu-period { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: 8px; font-family: var(--font-mono); font-size: 0.82rem; color: var(--accent-text); }
+  .edu-courses-title { margin: 16px 0 8px; font-size: 0.8rem; font-weight: 600; color: var(--text-faint); text-transform: uppercase; letter-spacing: 0.06em; }
+
+  .certs-title { margin-top: 48px; }
+  .certs { list-style: none; display: grid; gap: 12px; }
+  .cert { position: relative; display: flex; align-items: center; gap: 14px; padding: 14px 16px; border-left: 4px solid var(--tone); }
+  .cert:hover { transform: translateY(-2px); border-color: var(--accent-ring); border-left-color: var(--tone); }
+  .tone-azure { --tone: #2f8cff; }
+  .tone-db { --tone: #ff8a3d; }
+  .tone-ml { --tone: #12d640; }
+  .cert-logo { display: grid; place-items: center; width: 48px; height: 48px; border-radius: 12px; background: #fff; flex: none; }
+  .cert-logo img { width: 34px; height: 34px; object-fit: contain; }
+  .cert-body { display: flex; flex-direction: column; min-width: 0; flex: 1; }
+  .cert-body small { color: var(--text-faint); }
+  .cert-link { display: grid; place-items: center; width: 40px; height: 40px; border-radius: 10px; color: var(--text-muted); }
+  .cert-link::after { content: ''; position: absolute; inset: 0; }
+  .cert-link:hover { color: var(--accent-text); }
+
+  @media (min-width: 768px) {
+    .edu-grid { grid-template-columns: 1fr 1fr; }
+    .certs { grid-template-columns: repeat(3, 1fr); }
+  }
+</style>

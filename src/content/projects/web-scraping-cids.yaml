@@ -1,0 +1,46 @@
+title:
+  pt: Web Scraping CIDs
+  en: CID-10 Web Scraper
+summary:
+  pt: Robô que navega pelo portal do CREMESP, extrai os códigos CID-10 e gera planilhas Excel estruturadas, com retomada automática em caso de interrupção.
+  en: Bot that browses the CREMESP portal, extracts ICD-10 (CID-10) codes and generates structured Excel spreadsheets, resuming automatically if interrupted.
+problem:
+  pt: Consultar e organizar manualmente os códigos da Classificação Internacional de Doenças publicados no portal do CREMESP é demorado e sujeito a erros. O projeto automatiza a coleta e entrega os dados prontos em planilha.
+  en: Looking up and organizing the International Classification of Diseases codes published on the CREMESP portal by hand is slow and error-prone. This project automates the collection and delivers the data ready in a spreadsheet.
+features:
+  pt:
+    - Navegação automatizada pelo portal do CREMESP.
+    - Identificação e extração das tabelas com códigos CID-10.
+    - Paginação e tratamento de conteúdo dinâmico.
+    - Leitura de dados carregados em iframes.
+    - Extração de categorias, códigos e descrições.
+    - Geração de planilhas Excel estruturadas.
+    - Salvamento incremental durante a execução.
+    - Checkpoints de progresso e retomada de execuções interrompidas.
+    - Chrome em modo headless.
+  en:
+    - Automated navigation through the CREMESP portal.
+    - Detection and extraction of tables with ICD-10 codes.
+    - Pagination and handling of dynamic content.
+    - Reading data loaded inside iframes.
+    - Extraction of categories, codes and descriptions.
+    - Structured Excel spreadsheet output.
+    - Incremental saving while running.
+    - Progress checkpoints and resume of interrupted runs.
+    - Headless Chrome.
+results:
+  pt:
+    - Dados estruturados em 4 campos, código e descrição da categoria e código e descrição do CID.
+    - Retomada que evita reprocessar categorias já coletadas.
+  en:
+    - Data structured in 4 fields, category code and description plus ICD code and description.
+    - Resume logic that avoids reprocessing categories already collected.
+category: tool
+status: production
+featured: true
+order: 7
+icon: bx-spreadsheet
+hue: 120
+stack: [Python, Selenium, OpenPyXL, Google Chrome, ChromeDriver]
+links:
+  repo: https://github.com/Gustavo-AQ/web-scraping-CIDS

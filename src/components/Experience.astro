@@ -1,0 +1,105 @@
+---
+import Icon from './Icon.astro';
+import type { Lang } from '../i18n/ui';
+import { useTranslations } from '../i18n/utils';
+import { experience } from '../data/profile';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+---
+
+<section class="section" id="experience" aria-labelledby="experience-title">
+  <div class="container">
+    <div class="section-head" data-reveal>
+      <span class="kicker">{t('experience.kicker')}</span>
+      <h2 class="section-title" id="experience-title">{t('experience.title')}</h2>
+    </div>
+
+    <ol class="timeline">
+      {
+        experience.map((job) => (
+          <li class="tl-item" data-reveal>
+            <span class="tl-dot" aria-hidden="true" />
+            <article class="card tl-card">
+              <header class="tl-header">
+                <span class="tl-period">{job.period[lang]}</span>
+                <h3 class="tl-company">
+                  <a href={job.url} target="_blank" rel="noopener">
+                    {job.company}
+                    <Icon name="bx-link-external" size={16} />
+                  </a>
+                </h3>
+                <p class="tl-role">{job.role[lang]}</p>
+              </header>
+              <p class="tl-summary">{job.summary[lang]}</p>
+              <details class="tl-details">
+                <summary>
+                  <span class="more">{t('experience.more')}</span>
+                  <span class="less">{t('experience.less')}</span>
+                  <Icon name="bx-chevron-down" size={18} />
+                </summary>
+                <div class="tl-groups">
+                  {job.groups.map((g) => (
+                    <div>
+                      <h4>{g.title[lang]}</h4>
+                      <ul>
+                        {g.items[lang].map((it) => (
+                          <li>{it}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  ))}
+                </div>
+              </details>
+            </article>
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+</section>
+
+<style>
+  .timeline { list-style: none; padding: 0; margin: 0; position: relative; display: grid; gap: 20px; }
+  .timeline::before { content: ''; position: absolute; left: 7px; top: 8px; bottom: 8px; width: 2px; background: linear-gradient(var(--accent), var(--border)); border-radius: 2px; }
+  .tl-item { position: relative; padding-left: 32px; }
+  .tl-dot { position: absolute; left: 0; top: 22px; width: 16px; height: 16px; border-radius: 50%; background: var(--bg); border: 3px solid var(--accent); box-shadow: 0 0 0 4px var(--accent-soft); }
+  .tl-card { padding: 20px; }
+  .tl-period { font-family: var(--font-mono); font-size: 0.8rem; color: var(--accent-text); }
+  .tl-company { font-size: 1.2rem; margin-top: 4px; }
+  .tl-company a { color: var(--text); display: inline-flex; align-items: center; gap: 6px; }
+  .tl-company a :global(.icon) { color: var(--text-faint); }
+  .tl-company a:hover { color: var(--accent-text); text-decoration: none; }
+  .tl-role { color: var(--text-muted); font-style: italic; margin-top: 4px; font-size: 0.95rem; }
+  .tl-summary { margin-top: 12px; color: var(--text-muted); }
+
+  .tl-details { margin-top: 14px; border-top: 1px solid var(--border); }
+  .tl-details summary {
+    list-style: none; display: inline-flex; align-items: center; gap: 6px; min-height: 44px; cursor: pointer;
+    color: var(--accent-text); font-weight: 600; font-size: 0.92rem;
+  }
+  .tl-details summary::-webkit-details-marker { display: none; }
+  .tl-details summary :global(.icon) { transition: transform 0.25s var(--ease); }
+  .tl-details[open] summary :global(.icon) { transform: rotate(180deg); }
+  .tl-details .less, .tl-details[open] .more { display: none; }
+  .tl-details[open] .less { display: inline; }
+  .tl-groups { display: grid; gap: 20px; padding-bottom: 4px; }
+  .tl-groups h4 { font-size: 0.98rem; color: var(--text); margin-bottom: 10px; }
+  .tl-groups ul { list-style: none; display: grid; gap: 10px; }
+  .tl-groups li { position: relative; padding-left: 20px; color: var(--text-muted); font-size: 0.94rem; }
+  .tl-groups li::before { content: ''; position: absolute; left: 2px; top: 0.62em; width: 8px; height: 8px; border-radius: 2px; background: var(--accent); transform: rotate(45deg); }
+
+  @media (min-width: 768px) {
+    .tl-card { padding: 26px 28px; }
+    .tl-header { display: grid; grid-template-columns: 1fr auto; column-gap: 16px; }
+    .tl-period { grid-column: 2; grid-row: 1; padding-top: 4px; }
+    .tl-company { grid-column: 1; grid-row: 1; margin: 0; }
+    .tl-role { grid-column: 1 / -1; }
+  }
+  @media (min-width: 1024px) {
+    .tl-groups { grid-template-columns: 1fr 1fr; gap: 28px; }
+  }
+</style>

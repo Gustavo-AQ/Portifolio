@@ -1,0 +1,57 @@
+---
+import Base from '../layouts/Base.astro';
+import Hero from './Hero.astro';
+import About from './About.astro';
+import Projects from './Projects.astro';
+import Experience from './Experience.astro';
+import Skills from './Skills.astro';
+import Education from './Education.astro';
+import Contact from './Contact.astro';
+import type { Lang } from '../i18n/ui';
+import { useTranslations, homeUrl, allLangs, type Alternates } from '../i18n/utils';
+import { site, experience, education, skillGroups } from '../data/profile';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const alternates: Alternates = Object.fromEntries(allLangs.map((l) => [l, homeUrl(l)]));
+
+const skills = skillGroups.flatMap((g) => Object.values(g.tiers).flat().map((s) => s!.name));
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Person',
+    name: site.name,
+    url: site.url,
+    image: `${site.url}/og.png`,
+    email: `mailto:${site.email}`,
+    jobTitle: lang === 'pt' ? 'Desenvolvedor de Software e Engenheiro de Computação' : 'Software Developer and Computer Engineer',
+    description: t('meta.description'),
+    address: { '@type': 'PostalAddress', addressLocality: 'São Paulo', addressRegion: 'SP', addressCountry: 'BR' },
+    alumniOf: education.map((e) => ({ '@type': 'EducationalOrganization', name: e.institution })),
+    knowsAbout: skills,
+    knowsLanguage: ['pt-BR', 'en', 'es', 'fr'],
+    sameAs: [site.linkedin, site.github],
+    hasOccupation: experience.map((x) => ({ '@type': 'Occupation', name: x.role[lang] })),
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    name: site.name,
+    url: site.url,
+    inLanguage: ['pt-BR', 'en'],
+  },
+];
+---
+
+<Base lang={lang} alternates={alternates} isHome jsonLd={jsonLd}>
+  <Hero lang={lang} />
+  <About lang={lang} />
+  <Projects lang={lang} />
+  <Experience lang={lang} />
+  <Skills lang={lang} />
+  <Education lang={lang} />
+  <Contact lang={lang} />
+</Base>

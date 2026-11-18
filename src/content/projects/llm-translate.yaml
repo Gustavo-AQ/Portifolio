@@ -1,0 +1,63 @@
+title:
+  pt: LLM Translate
+  en: LLM Translate
+summary:
+  pt: Extensão para navegadores Chromium que traduz textos e páginas inteiras com modelos de linguagem rodando localmente via Ollama, sem chaves de API.
+  en: Chromium browser extension that translates text and whole pages with language models running locally through Ollama, with no API keys.
+problem:
+  pt: Tradutores online enviam o conteúdo para servidores externos e muitas vezes dependem de APIs pagas. O LLM Translate traduz usando modelos locais, mantendo o texto no computador do usuário.
+  en: Online translators send content to external servers and often depend on paid APIs. LLM Translate uses local models, keeping the text on the user's computer.
+features:
+  pt:
+    - Tradução de textos selecionados com um botão flutuante ao lado da seleção.
+    - Tradução de páginas inteiras preservando a estrutura HTML.
+    - Processamento progressivo em lotes, com barra de progresso e opção de restaurar o original.
+    - Leitura do texto traduzido em voz alta (TTS).
+    - Integração com modelos executados no Ollama, com seleção dos modelos instalados.
+    - Detecção automática do idioma do sistema.
+    - Idioma de destino, prompt e endereço do servidor Ollama configuráveis.
+    - Funciona localmente, sem chaves de APIs comerciais.
+  en:
+    - Translates selected text through a floating button next to the selection.
+    - Translates whole pages while preserving the HTML structure.
+    - Progressive batch processing with a progress bar and an option to restore the original.
+    - Reads the translated text aloud (TTS).
+    - Works with models running on Ollama, letting you pick any installed model.
+    - Detects the system language automatically.
+    - Configurable target language, prompt and Ollama server address.
+    - Runs locally, with no commercial API keys.
+sections:
+  - title:
+      pt: Arquitetura
+      en: Architecture
+    items:
+      pt:
+        - Manifest V3, com scripts de conteúdo que injetam o botão flutuante nas páginas.
+        - Service worker que orquestra as chamadas à API do Ollama.
+        - Popup completo para tradução direta e configurações.
+        - Tradução de páginas com concorrência limitada, processando blocos em paralelo sem travar o navegador.
+      en:
+        - Manifest V3, with content scripts that inject the floating button into pages.
+        - Service worker that orchestrates calls to the Ollama API.
+        - Full popup for direct translation and settings.
+        - Page translation with bounded concurrency, processing blocks in parallel without freezing the browser.
+category: tool
+status: completed
+private: true
+order: 13
+icon: bx-globe
+hue: 230
+stack: [JavaScript, HTML5, CSS3, Manifest V3, Ollama API, LLMs locais, Web Speech API]
+links:
+  store: https://chromewebstore.google.com/detail/ollama-local-translator/dedofpbldaifajdfbmoeikgjomieikld
+screenshots:
+  - src: ../../assets/projects/llm-translate/1.png
+    alt: { pt: Popup de tradução direta, en: Direct translation popup }
+  - src: ../../assets/projects/llm-translate/2.png
+    alt: { pt: Configurações da extensão, en: Extension settings }
+  - src: ../../assets/projects/llm-translate/3.png
+    alt: { pt: Seleção de modelo do Ollama, en: Ollama model selection }
+  - src: ../../assets/projects/llm-translate/4.png
+    alt: { pt: Botão flutuante ao selecionar texto, en: Floating button on text selection }
+  - src: ../../assets/projects/llm-translate/5.png
+    alt: { pt: Tradução exibida na página, en: Translation shown on the page }

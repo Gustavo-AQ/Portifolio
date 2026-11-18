@@ -1,0 +1,26 @@
+title:
+  pt: IA Data Analysis
+  en: AI Data Analysis
+summary:
+  pt: Análise de dados com Inteligência Artificial usando pandas e PandasAI, com geração e exportação de gráficos.
+  en: Data analysis powered by Artificial Intelligence using pandas and PandasAI, with chart generation and export.
+problem:
+  pt: Explorar dados costuma exigir muito código repetitivo. O projeto usa IA para acelerar a análise e gerar visualizações a partir de perguntas.
+  en: Exploring data usually takes a lot of repetitive code. The project uses AI to speed up analysis and generate charts from questions.
+features:
+  pt:
+    - Análises com pandas e PandasAI.
+    - Gráficos exportados para exports/charts.
+    - Ambiente reproduzível com pyproject.toml e .python-version.
+  en:
+    - Analysis with pandas and PandasAI.
+    - Charts exported to exports/charts.
+    - Reproducible environment with pyproject.toml and .python-version.
+category: app
+status: completed
+order: 19
+icon: bx-bar-chart-alt-2
+hue: 15
+stack: [Python, Jupyter Notebook, pandas, PandasAI]
+links:
+  repo: https://github.com/Gustavo-AQ/IA-Data-Analysis

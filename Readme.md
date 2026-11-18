@@ -1,80 +1,61 @@
-# Personal Portfolio 🔥
-> https://me.gaqtech.dev/
+# Portfólio | Gustavo Quinup
 
-:star: Star me on GitHub — it helps!
+> https://me.gaqtech.dev
 
-[![Maintenance](https://img.shields.io/badge/maintained-yes-green.svg)](https://github.com/ICE3BR/Portifolio/commits/master/)
-[![Website shields.io](https://img.shields.io/badge/website-up-yellow)](https://ice3br.github.io/Portifolio/)
-[![Ask Me Anything !](https://img.shields.io/badge/ask%20me-linkedin-1abc9c.svg)](https://www.linkedin.com/in/gustavoaquinup2005/)
-[![License](http://img.shields.io/:license-mit-blue.svg?style=flat-square)](http://badges.mit-license.org)
+Portfólio pessoal bilíngue (português e inglês), feito com [Astro](https://astro.build) e publicado no GitHub Pages com domínio próprio.
 
-### Website Preview
-#### Home Page
-<img src="website_images/HomePage.gif" width="900">
+<p>
+  <img src="website_images/mobile-hero.webp" width="240" alt="Hero no celular, tema escuro">
+  <img src="website_images/mobile-hero-light.webp" width="240" alt="Hero no celular, tema claro">
+</p>
+<img src="website_images/desktop-hero.webp" width="900" alt="Hero no desktop">
 
+## Recursos
 
-#### About Page
-<img src="website_images/AboutPage.png" width="900">
+- Layout pensado primeiro para o celular
+- Português e inglês, com URLs próprias (`/` e `/en/`) e tags `hreflang`
+- Tema claro e escuro, seguindo a preferência do sistema
+- Projetos em destaque (carrossel) e catálogo com filtros e 3 projetos por página
+- Uma página de estudo de caso para cada projeto (`/projetos/<slug>/`)
+- Formulário de contato com [Web3Forms](https://web3forms.com)
+- Versão para IA: `/llms.txt`, `/llms-full.txt`, `/portfolio.md` e a página `/ia/`
+- Dados estruturados (schema.org), sitemap, robots.txt e imagem de compartilhamento
+- Zero framework de UI no cliente: só HTML, CSS e alguns scripts pequenos
 
+## Rodando localmente
 
-#### Projects Page
-<img src="website_images/ProjectPage.png" width="900">
-  
+```bash
+npm install
+npm run dev      # http://localhost:4321
+npm run build    # verifica tipos e gera o site em dist/
+npm run preview  # serve o dist/
+```
 
+Requer Node.js 22.12 ou mais novo.
 
-:star: Star me on GitHub — it helps!
+## Como editar o conteúdo
 
-## Features 📋
-⚡️ Fully Responsive\
-⚡️ Valid HTML5 & CSS3\
-⚡️ Typing animation using `Typed.js`\
-⚡️ Easy to modify
+| O quê | Onde |
+|---|---|
+| Projetos | `src/content/projects/<slug>.yaml` (um arquivo por projeto) |
+| Sobre, experiência, formação, certificações, habilidades | `src/data/profile.ts` |
+| Textos da interface (botões, títulos) | `src/i18n/ui.ts` |
+| E-mail, redes, link do currículo, GA4, chave do Web3Forms | `site` em `src/data/profile.ts` |
 
-## Installation & Deployment 📦
-- Clone the repository and modify the content of <b>index.html</b> 
-- Add or remove images from `assets/img/` directory as per your requirement.
-- Update the info of `projects` folder according to your need
-- Use [Github Pages](https://create-react-app.dev/docs/deployment/#github-pages) to create your own website.
-- To deploy your website, first you need to create github repository with name `<your-github-username>.github.io` and push the generated code to the `master` branch.
+### Adicionar um projeto
 
-## Sections 📚
-✔️ About\
-✔️ Interests\
-✔️ Education\
-✔️ Online Certification\
-✔️ Experience\
-✔️ Projects \
-✔️ Skills \
-✔️ Resume\
-✔️ Contact Info
+1. Copie um arquivo de `src/content/projects/` e renomeie. O nome do arquivo vira a URL.
+2. Preencha os blocos `pt` e `en`, a `category` (`app` ou `tool`), o `status` (`production`, `development` ou `completed`), o `order`, o `icon` ([Boxicons](https://boxicons.com), ex.: `bx-car`) e o `hue` (cor da capa, de 0 a 360).
+3. Use `featured: true` para aparecer nos destaques e `private: true` para projetos com código privado.
+4. Opcional: coloque imagens em `src/assets/projects/<slug>/` e liste-as em `screenshots` (ou use `cover`).
 
+O `npm run build` valida todos os campos e avisa se algo estiver faltando.
 
+## Deploy
 
-## Tools Used 🛠️
-* <b>GitHub Pages</b> - To host my static website (HTML, CSS, JS).
+Todo push na `master` roda `.github/workflows/deploy.yml`, que gera o site e publica no GitHub Pages.
+Em **Settings → Pages**, a origem precisa estar em **GitHub Actions**.
 
-## Contributing 💡
-#### Step 1
+## Licença
 
-- **Option 1**
-    - 🍴 Fork this repo!
-
-- **Option 2**
-    - 👯 Clone this repo to your local machine.
-
-
-#### Step 2
-
-- **Build your code** 🔨🔨🔨
-
-#### Step 3
-
-- 🔃 Create a new pull request.
-
-## Reference
-- [Prerak Raja](https://github.com/rajaprerak)
-
-## License
-[![License](http://img.shields.io/:license-mit-blue.svg?style=flat-square)](http://badges.mit-license.org)
-
-- **[MIT license](http://opensource.org/licenses/mit-license.php)**
+MIT

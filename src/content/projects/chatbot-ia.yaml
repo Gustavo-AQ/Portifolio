@@ -1,0 +1,28 @@
+title:
+  pt: Chatbot IA (ICEBERG IA)
+  en: AI Chatbot (ICEBERG IA)
+summary:
+  pt: Chatbot de terminal que roda o modelo DeepSeek-R1 8B localmente via Ollama, com histórico de conversas persistente.
+  en: Terminal chatbot running the DeepSeek-R1 8B model locally through Ollama, with persistent conversation history.
+problem:
+  pt: Usar assistentes de IA normalmente depende de serviços na nuvem. O ICEBERG IA roda um modelo de linguagem localmente, com uma interface de terminal leve.
+  en: Using AI assistants usually depends on cloud services. ICEBERG IA runs a language model locally, with a lightweight terminal interface.
+features:
+  pt:
+    - Conversa com o modelo DeepSeek-R1 8B executado no Ollama.
+    - Persistência do histórico de conversas.
+    - Comandos interativos no terminal.
+    - Interface otimizada para uso eficiente de recursos.
+  en:
+    - Chat with the DeepSeek-R1 8B model running on Ollama.
+    - Persistent conversation history.
+    - Interactive terminal commands.
+    - Interface optimized for efficient resource use.
+category: app
+status: completed
+order: 18
+icon: bx-bot
+hue: 180
+stack: [Python, Ollama, DeepSeek-R1 8B, uv]
+links:
+  repo: https://github.com/Gustavo-AQ/chatbot-IA

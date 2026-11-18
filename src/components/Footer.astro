@@ -1,0 +1,59 @@
+---
+import Icon from './Icon.astro';
+import type { Lang } from '../i18n/ui';
+import { useTranslations, homeUrl, aiPageUrl } from '../i18n/utils';
+import { site } from '../data/profile';
+
+interface Props {
+  lang: Lang;
+  isHome: boolean;
+}
+const { lang, isHome } = Astro.props;
+const t = useTranslations(lang);
+const base = isHome ? '' : homeUrl(lang);
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <div class="footer-brand">
+      <a class="footer-name" href={isHome ? '#main' : homeUrl(lang)}>{site.name}</a>
+      <p>{t('footer.made')}</p>
+    </div>
+    <nav class="footer-nav" aria-label="Rodapé">
+      <a href={`${base}#projects`}>{t('nav.projects')}</a>
+      <a href={`${base}#experience`}>{t('nav.experience')}</a>
+      <a href={`${base}#contact`}>{t('nav.contact')}</a>
+      <a href={site.cv} target="_blank" rel="noopener">{t('nav.cv')}</a>
+      <a href={aiPageUrl(lang)}><Icon name="bx-bot" size={16} />{t('ai.link')}</a>
+    </nav>
+    <div class="footer-social">
+      <a class="icon-btn" href={site.linkedin} target="_blank" rel="noopener" aria-label="LinkedIn"><Icon name="bxl-linkedin" size={20} /></a>
+      <a class="icon-btn" href={site.github} target="_blank" rel="noopener" aria-label="GitHub"><Icon name="bxl-github" size={20} /></a>
+      <a class="icon-btn" href={`mailto:${site.email}`} aria-label="E-mail"><Icon name="bx-envelope" size={20} /></a>
+    </div>
+  </div>
+  <div class="container footer-bottom">
+    <span>© {year} {site.name}</span>
+    <span class="mono">me.gaqtech.dev</span>
+  </div>
+</footer>
+
+<style>
+  .site-footer { border-top: 1px solid var(--border); background: var(--bg-soft); padding: 40px 0 calc(28px + env(safe-area-inset-bottom)); }
+  .footer-inner { display: grid; gap: 24px; }
+  .footer-name { font-family: var(--font-display); font-weight: 700; font-size: 1.2rem; color: var(--text); }
+  .footer-brand p { color: var(--text-faint); font-size: 0.9rem; margin-top: 6px; }
+  .footer-nav { display: flex; flex-wrap: wrap; gap: 8px 20px; }
+  .footer-nav a { display: inline-flex; align-items: center; gap: 6px; color: var(--text-muted); font-size: 0.92rem; padding: 4px 0; }
+  .footer-nav a:hover { color: var(--accent-text); }
+  .footer-social { display: flex; gap: 10px; }
+  .footer-bottom {
+    display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px;
+    margin-top: 28px; padding-top: 20px; border-top: 1px solid var(--border); color: var(--text-faint); font-size: 0.82rem;
+  }
+  .mono { font-family: var(--font-mono); }
+  @media (min-width: 900px) {
+    .footer-inner { grid-template-columns: 1.2fr 2fr auto; align-items: center; }
+  }
+</style>

@@ -1,0 +1,30 @@
+title:
+  pt: Processador de Imagens
+  en: Image Processor
+summary:
+  pt: Aplica desfoque configurável e converte imagens para preto e branco, gerando um efeito de desenho, com pré-visualização do resultado.
+  en: Applies configurable blur and converts images to black and white for a sketch-like effect, with a preview of the result.
+problem:
+  pt: Aplicar um efeito simples de desenho em fotos não deveria exigir um editor pesado. O processador faz isso em poucos passos.
+  en: Applying a simple sketch effect to photos shouldn't require a heavy editor. The processor does it in a few steps.
+features:
+  pt:
+    - Seleção da imagem de origem.
+    - Intensidade de desfoque definida pelo usuário.
+    - Conversão para preto e branco com efeito de desenho.
+    - Escolha da pasta de saída, com Downloads como padrão.
+    - Pré-visualização da imagem tratada.
+  en:
+    - Pick the source image.
+    - User-defined blur intensity.
+    - Black and white conversion with a sketch effect.
+    - Choose the output folder, Downloads by default.
+    - Preview of the processed image.
+category: tool
+status: completed
+order: 22
+icon: bx-image
+hue: 285
+stack: [Python]
+links:
+  repo: https://github.com/Gustavo-AQ/tratador-imagens

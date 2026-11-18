@@ -1,0 +1,75 @@
+---
+import Base from '../layouts/Base.astro';
+import Icon from './Icon.astro';
+import type { Lang } from '../i18n/ui';
+import { useTranslations, homeUrl, aiPageUrl, markdownUrl, allLangs, type Alternates } from '../i18n/utils';
+import { buildPortfolioMarkdown } from '../lib/markdown';
+import { site } from '../data/profile';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const alternates: Alternates = Object.fromEntries(allLangs.map((l) => [l, aiPageUrl(l)]));
+const md = await buildPortfolioMarkdown(lang);
+const mdUrl = new URL(markdownUrl(lang), site.url).href;
+const prompt = t('ai.prompt').replace('{url}', mdUrl);
+const chatgpt = `https://chatgpt.com/?q=${encodeURIComponent(prompt)}`;
+const claude = `https://claude.ai/new?q=${encodeURIComponent(prompt)}`;
+---
+
+<Base lang={lang} title={t('ai.title')} description={t('ai.lead')} alternates={alternates}>
+  <section class="page-hero">
+    <div class="container">
+      <a class="back-link" href={homeUrl(lang)}><Icon name="bx-left-arrow-alt" size={18} />{site.name}</a>
+      <span class="kicker">llms.txt · Markdown</span>
+      <h1 class="section-title"><Icon name="bx-bot" size={40} class="bot" />{t('ai.title')}</h1>
+      <p class="section-lead lead">{t('ai.lead')}</p>
+      <div class="ai-actions">
+        <button class="btn btn-primary" type="button" data-copy-md data-done={t('ai.copied')}>
+          <Icon name="bx-copy" size={18} /><span class="label">{t('ai.copy')}</span>
+        </button>
+        <a class="btn btn-ghost" href={chatgpt} target="_blank" rel="noopener"><Icon name="bx-link-external" size={18} />{t('ai.open.chatgpt')}</a>
+        <a class="btn btn-ghost" href={claude} target="_blank" rel="noopener"><Icon name="bx-link-external" size={18} />{t('ai.open.claude')}</a>
+        <a class="btn btn-ghost" href={markdownUrl(lang)}><Icon name="bx-file" size={18} />{t('ai.raw')}</a>
+      </div>
+    </div>
+  </section>
+  <section class="container md-wrap">
+    <pre class="md" id="md-content">{md}</pre>
+  </section>
+</Base>
+
+<script>
+  const btn = document.querySelector<HTMLButtonElement>('[data-copy-md]');
+  const pre = document.getElementById('md-content');
+  btn?.addEventListener('click', async () => {
+    const label = btn.querySelector('.label')!;
+    const original = label.textContent;
+    try {
+      await navigator.clipboard.writeText(pre?.textContent ?? '');
+      label.textContent = btn.dataset.done ?? '';
+    } catch {
+      const range = document.createRange();
+      if (pre) range.selectNodeContents(pre);
+      const sel = window.getSelection();
+      sel?.removeAllRanges();
+      sel?.addRange(range);
+    }
+    setTimeout(() => (label.textContent = original), 1800);
+  });
+</script>
+
+<style>
+  .section-title { display: flex; align-items: center; gap: 12px; }
+  .section-title :global(.bot) { color: var(--accent-text); }
+  .lead { max-width: 70ch; }
+  .ai-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 24px; }
+  .md-wrap { padding-top: 28px; padding-bottom: 72px; }
+  .md {
+    margin: 0; padding: 20px; max-height: 70vh; overflow: auto; white-space: pre-wrap; overflow-wrap: anywhere;
+    font-family: var(--font-mono); font-size: 0.84rem; line-height: 1.7; color: var(--text-muted);
+    background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+  }
+</style>

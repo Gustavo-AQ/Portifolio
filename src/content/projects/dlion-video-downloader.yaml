@@ -1,0 +1,28 @@
+title:
+  pt: DLion, Downloader de Vídeos
+  en: DLion, Video Downloader
+summary:
+  pt: Ferramenta de terminal para baixar vídeos e áudios, com menu interativo e conversão automática para MP4 ou MP3.
+  en: Terminal tool to download videos and audio, with an interactive menu and automatic conversion to MP4 or MP3.
+problem:
+  pt: Baixar vídeos e áudios costuma depender de sites cheios de anúncios. O DLion faz isso localmente, com um menu simples no terminal.
+  en: Downloading videos and audio usually means ad-filled websites. DLion does it locally, with a simple terminal menu.
+features:
+  pt:
+    - Download de vídeos e áudios com yt-dlp.
+    - Menu interativo com InquirerPy.
+    - Conversão automática para MP4 e MP3.
+    - Downloads em paralelo com threads.
+  en:
+    - Video and audio downloads with yt-dlp.
+    - Interactive menu with InquirerPy.
+    - Automatic conversion to MP4 and MP3.
+    - Parallel downloads using threads.
+category: app
+status: completed
+order: 20
+icon: bx-download
+hue: 330
+stack: [Python, yt-dlp, InquirerPy, threading]
+links:
+  repo: https://github.com/Gustavo-AQ/DLion

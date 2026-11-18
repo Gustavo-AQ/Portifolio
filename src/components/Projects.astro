@@ -1,0 +1,277 @@
+---
+import Icon from './Icon.astro';
+import ProjectCard from './ProjectCard.astro';
+import type { Lang } from '../i18n/ui';
+import { useTranslations } from '../i18n/utils';
+import { getFeatured, getCatalog, CATALOG_PAGE_SIZE } from '../lib/projects';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const featured = await getFeatured();
+const catalog = await getCatalog();
+const counts = {
+  all: catalog.length,
+  app: catalog.filter((p) => p.data.category === 'app').length,
+  tool: catalog.filter((p) => p.data.category === 'tool').length,
+};
+const filters = [
+  { key: 'all', label: t('projects.filter.all') },
+  { key: 'app', label: t('projects.filter.app') },
+  { key: 'tool', label: t('projects.filter.tool') },
+] as const;
+---
+
+<section class="section section-alt" id="projects" aria-labelledby="projects-title">
+  <div class="container">
+    <div class="section-head" data-reveal>
+      <span class="kicker">{t('projects.kicker')}</span>
+      <h2 class="section-title" id="projects-title">{t('projects.title')}</h2>
+    </div>
+
+    <!-- Destaques -->
+    <div class="featured" data-carousel>
+      <div class="featured-head">
+        <h3 class="subhead"><Icon name="bxs-star" size={18} class="star" />{t('projects.featured')} <span class="count">{featured.length}</span></h3>
+        <div class="carousel-controls">
+          <span class="carousel-counter mono" aria-live="polite"><span data-current>1</span> / {featured.length}</span>
+          <button class="icon-btn" type="button" data-prev aria-label={t('projects.carousel.prev')}><Icon name="bx-chevron-left" size={22} /></button>
+          <button class="icon-btn" type="button" data-next aria-label={t('projects.carousel.next')}><Icon name="bx-chevron-right" size={22} /></button>
+        </div>
+      </div>
+      <ul class="carousel-track" data-track tabindex="0" aria-label={t('projects.featured')}>
+        {featured.map((p) => <li class="carousel-item"><ProjectCard project={p} lang={lang} variant="featured" headingLevel="h4" /></li>)}
+      </ul>
+      <div class="carousel-dots" data-dots aria-hidden="true">
+        {featured.map((_, i) => <span class:list={['dot', { active: i === 0 }]}></span>)}
+      </div>
+    </div>
+
+    <!-- Catálogo com filtros e paginação -->
+    <div class="catalog" id="all-projects" data-catalog data-page-size={CATALOG_PAGE_SIZE}>
+      <div class="catalog-head">
+        <h3 class="subhead">{t('projects.all')} <span class="count">{catalog.length}</span></h3>
+        <div class="filters" role="group" aria-label={t('projects.filter.label')}>
+          {
+            filters.map((f, i) => (
+              <button type="button" class="filter" data-filter={f.key} aria-pressed={i === 0 ? 'true' : 'false'}>
+                {f.label}
+                <span class="filter-count">{counts[f.key]}</span>
+              </button>
+            ))
+          }
+        </div>
+      </div>
+
+      <ul class="catalog-grid" data-grid>
+        {catalog.map((p) => <li data-category={p.data.category}><ProjectCard project={p} lang={lang} headingLevel="h4" /></li>)}
+      </ul>
+
+      <nav class="pagination" data-pagination hidden aria-label={t('projects.page')}>
+        <button class="btn btn-ghost btn-sm" type="button" data-page-prev>
+          <Icon name="bx-chevron-left" size={18} /><span class="pg-label">{t('projects.prev')}</span>
+        </button>
+        <ol class="pages" data-pages></ol>
+        <button class="btn btn-ghost btn-sm" type="button" data-page-next>
+          <span class="pg-label">{t('projects.next')}</span><Icon name="bx-chevron-right" size={18} />
+        </button>
+      </nav>
+      <p class="pg-status" data-status aria-live="polite" data-tpl={`${t('projects.showing')} {from}–{to} ${t('projects.of')} {total}`}></p>
+    </div>
+  </div>
+</section>
+
+<script>
+  // ---------- Carrossel de destaques ----------
+  document.querySelectorAll<HTMLElement>('[data-carousel]').forEach((root) => {
+    const track = root.querySelector<HTMLElement>('[data-track]')!;
+    const items = Array.from(track.children) as HTMLElement[];
+    const dots = Array.from(root.querySelectorAll<HTMLElement>('[data-dots] .dot'));
+    const current = root.querySelector<HTMLElement>('[data-current]');
+    const prev = root.querySelector<HTMLButtonElement>('[data-prev]');
+    const next = root.querySelector<HTMLButtonElement>('[data-next]');
+
+    const step = () => (items[1] ? items[1].offsetLeft - items[0].offsetLeft : track.clientWidth);
+    const index = () => Math.round(track.scrollLeft / step());
+    const update = () => {
+      const i = Math.min(index(), items.length - 1);
+      dots.forEach((d, k) => d.classList.toggle('active', k === i));
+      if (current) current.textContent = String(i + 1);
+      if (prev) prev.disabled = track.scrollLeft <= 4;
+      if (next) next.disabled = track.scrollLeft + track.clientWidth >= track.scrollWidth - 4;
+    };
+    prev?.addEventListener('click', () => track.scrollBy({ left: -step(), behavior: 'smooth' }));
+    next?.addEventListener('click', () => track.scrollBy({ left: step(), behavior: 'smooth' }));
+    track.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight') { e.preventDefault(); track.scrollBy({ left: step(), behavior: 'smooth' }); }
+      if (e.key === 'ArrowLeft') { e.preventDefault(); track.scrollBy({ left: -step(), behavior: 'smooth' }); }
+    });
+    let raf = 0;
+    track.addEventListener('scroll', () => { cancelAnimationFrame(raf); raf = requestAnimationFrame(update); }, { passive: true });
+    window.addEventListener('resize', update);
+    update();
+  });
+
+  // ---------- Catálogo: filtro + paginação ----------
+  document.querySelectorAll<HTMLElement>('[data-catalog]').forEach((root) => {
+    const size = Number(root.dataset.pageSize) || 3;
+    const items = Array.from(root.querySelectorAll<HTMLElement>('[data-grid] > li'));
+    const buttons = Array.from(root.querySelectorAll<HTMLButtonElement>('[data-filter]'));
+    const nav = root.querySelector<HTMLElement>('[data-pagination]')!;
+    const pagesEl = root.querySelector<HTMLOListElement>('[data-pages]')!;
+    const prev = root.querySelector<HTMLButtonElement>('[data-page-prev]')!;
+    const next = root.querySelector<HTMLButtonElement>('[data-page-next]')!;
+    const status = root.querySelector<HTMLElement>('[data-status]');
+    let filter = 'all';
+    let page = 1;
+
+    const visible = () => items.filter((li) => filter === 'all' || li.dataset.category === filter);
+
+    /** Números de página com reticências quando há muitas páginas */
+    const pageList = (total: number, cur: number): (number | '…')[] => {
+      if (total <= 7) return Array.from({ length: total }, (_, i) => i + 1);
+      const set = new Set([1, total, cur, cur - 1, cur + 1]);
+      if (cur <= 3) [2, 3, 4].forEach((n) => set.add(n));
+      if (cur >= total - 2) [total - 1, total - 2, total - 3].forEach((n) => set.add(n));
+      const nums = [...set].filter((n) => n >= 1 && n <= total).sort((a, b) => a - b);
+      const out: (number | '…')[] = [];
+      nums.forEach((n, i) => {
+        if (i && n - nums[i - 1] > 1) out.push('…');
+        out.push(n);
+      });
+      return out;
+    };
+
+    const render = (scroll = false) => {
+      const list = visible();
+      const total = Math.max(1, Math.ceil(list.length / size));
+      page = Math.min(Math.max(1, page), total);
+      const start = (page - 1) * size;
+      const shown = new Set(list.slice(start, start + size));
+      items.forEach((li) => {
+        li.hidden = !shown.has(li);
+        li.classList.remove('enter');
+        if (!li.hidden) {
+          void li.offsetWidth; // reinicia a animação de entrada
+          li.classList.add('enter');
+        }
+      });
+
+      nav.hidden = total <= 1;
+      prev.disabled = page === 1;
+      next.disabled = page === total;
+      pagesEl.innerHTML = '';
+      pageList(total, page).forEach((n) => {
+        const li = document.createElement('li');
+        if (n === '…') {
+          li.textContent = '…';
+          li.className = 'ellipsis';
+        } else {
+          const b = document.createElement('button');
+          b.type = 'button';
+          b.className = 'page-btn';
+          b.textContent = String(n);
+          if (n === page) b.setAttribute('aria-current', 'page');
+          b.addEventListener('click', () => { page = n; render(true); });
+          li.appendChild(b);
+        }
+        pagesEl.appendChild(li);
+      });
+
+      if (status?.dataset.tpl) {
+        status.textContent = list.length
+          ? status.dataset.tpl
+              .replace('{from}', String(start + 1))
+              .replace('{to}', String(Math.min(start + size, list.length)))
+              .replace('{total}', String(list.length))
+          : '';
+      }
+      if (scroll) {
+        const top = root.getBoundingClientRect().top + window.scrollY - 76;
+        if (window.scrollY > top) window.scrollTo({ top, behavior: 'smooth' });
+      }
+    };
+
+    buttons.forEach((b) =>
+      b.addEventListener('click', () => {
+        filter = b.dataset.filter ?? 'all';
+        page = 1;
+        buttons.forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+        render();
+      }),
+    );
+    prev.addEventListener('click', () => { page--; render(true); });
+    next.addEventListener('click', () => { page++; render(true); });
+    render();
+  });
+</script>
+
+<style>
+  .featured { margin-bottom: 56px; }
+  .featured-head, .catalog-head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 16px; }
+  .featured-head .subhead, .catalog-head .subhead { margin: 0; }
+  .subhead :global(.star) { color: var(--gold); }
+  .carousel-controls { display: flex; align-items: center; gap: 8px; }
+  .carousel-controls .icon-btn:disabled { opacity: 0.4; cursor: default; }
+  .mono { font-family: var(--font-mono); font-size: 0.82rem; color: var(--text-faint); margin-right: 4px; }
+
+  .carousel-track {
+    list-style: none; display: grid; grid-auto-flow: column; grid-auto-columns: 86%; gap: 14px;
+    overflow-x: auto; overscroll-behavior-x: contain; scroll-snap-type: x mandatory; scroll-padding-inline: var(--gutter);
+    padding: 6px var(--gutter) 14px; margin-inline: calc(-1 * var(--gutter));
+    scrollbar-width: none;
+  }
+  .carousel-track::-webkit-scrollbar { display: none; }
+  .carousel-item { scroll-snap-align: start; min-width: 0; }
+  .carousel-dots { display: flex; justify-content: center; gap: 6px; margin-top: 4px; }
+  .dot { width: 7px; height: 7px; border-radius: 999px; background: var(--border-strong); transition: width 0.25s var(--ease), background-color 0.25s; }
+  .dot.active { width: 22px; background: var(--accent); }
+
+  .filters { display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; max-width: 100%; padding: 2px; }
+  .filters::-webkit-scrollbar { display: none; }
+  .filter {
+    display: inline-flex; align-items: center; gap: 8px; min-height: 40px; padding: 0 14px; border-radius: 999px; white-space: nowrap;
+    border: 1px solid var(--border-strong); background: var(--surface); color: var(--text-muted); font-size: 0.88rem; font-weight: 600; cursor: pointer;
+    transition: background-color 0.2s, color 0.2s, border-color 0.2s;
+  }
+  .filter:hover { color: var(--text); border-color: var(--accent-ring); }
+  .filter[aria-pressed='true'] { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
+  .filter-count { font-family: var(--font-mono); font-size: 0.75rem; padding: 1px 7px; border-radius: 999px; background: var(--surface-2); color: var(--text-faint); }
+  .filter[aria-pressed='true'] .filter-count { background: rgba(2, 20, 10, 0.16); color: var(--on-accent); }
+
+  .catalog-grid { list-style: none; display: grid; gap: 12px; }
+  .catalog-grid > li[hidden] { display: none; }
+  .catalog-grid > li.enter { animation: card-in 0.35s var(--ease) both; }
+  .catalog-grid > li.enter:nth-child(3n + 2) { animation-delay: 50ms; }
+  .catalog-grid > li.enter:nth-child(3n) { animation-delay: 100ms; }
+  @keyframes card-in { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+
+  .pagination { display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 24px; }
+  .pagination[hidden] { display: none; }
+  .pagination .btn:disabled { opacity: 0.4; cursor: default; }
+  .pages { list-style: none; display: flex; align-items: center; gap: 4px; padding: 0; margin: 0; }
+  .pages :global(.page-btn) {
+    min-width: 40px; height: 40px; border-radius: 10px; border: 1px solid var(--border); background: var(--surface); color: var(--text-muted);
+    font-family: var(--font-mono); font-size: 0.9rem; cursor: pointer;
+  }
+  .pages :global(.page-btn:hover) { border-color: var(--accent-ring); color: var(--text); }
+  .pages :global(.page-btn[aria-current='page']) { background: var(--accent-soft); border-color: var(--accent); color: var(--accent-text); font-weight: 700; }
+  .pages :global(.ellipsis) { color: var(--text-faint); padding: 0 2px; }
+  .pg-status { text-align: center; margin-top: 12px; font-size: 0.82rem; color: var(--text-faint); }
+  @media (max-width: 479px) {
+    .pg-label { display: none; }
+    .pagination .btn { padding: 0 10px; }
+  }
+
+  @media (min-width: 720px) {
+    .carousel-track { grid-auto-columns: calc((100% - 14px) / 2); margin-inline: 0; padding-inline: 0; scroll-padding-inline: 0; }
+  }
+  @media (min-width: 1100px) {
+    .carousel-track { grid-auto-columns: calc((100% - 28px) / 3); }
+  }
+  @media (min-width: 960px) {
+    .catalog-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+  }
+</style>

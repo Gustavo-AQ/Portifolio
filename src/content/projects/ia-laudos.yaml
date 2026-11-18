@@ -1,0 +1,47 @@
+title:
+  pt: IA Laudos
+  en: IA Laudos
+summary:
+  pt: Assistente de IA que lê laudos periciais em PDF e gera análises textuais estruturadas para apoiar a triagem jurídica.
+  en: AI assistant that reads expert reports in PDF and produces structured text analyses to support legal triage.
+problem:
+  pt: Ler e triar laudos periciais é um trabalho manual, longo e repetitivo. O IA Laudos usa inteligência artificial para interpretar os documentos em PDF e devolver uma análise estruturada, agilizando atividades jurídicas e administrativas.
+  en: Reading and triaging expert reports is slow, manual and repetitive work. IA Laudos uses artificial intelligence to interpret the PDF documents and return a structured analysis, speeding up legal and administrative tasks.
+features:
+  pt:
+    - Recebimento de laudos periciais em PDF.
+    - Validação do caminho e do formato dos arquivos.
+    - Envio temporário dos documentos para processamento pela OpenAI.
+    - Análise guiada por instruções previamente configuradas.
+    - Extração das informações relevantes dos documentos.
+    - Respostas textuais estruturadas.
+    - Exclusão do arquivo remoto após o processamento.
+    - Execução por linha de comando, com opção de empacotar como executável.
+    - Credenciais configuradas por variáveis de ambiente.
+  en:
+    - Accepts expert reports in PDF.
+    - Validates file path and format.
+    - Temporarily uploads documents for processing by OpenAI.
+    - Analysis guided by preconfigured instructions.
+    - Extracts relevant information from the documents.
+    - Returns structured text responses.
+    - Deletes the remote file after processing.
+    - Runs from the command line and can be packaged as an executable.
+    - Credentials configured through environment variables.
+results:
+  pt:
+    - Em uso como módulo IA_LAUDO dentro do Legal-HUB.
+  en:
+    - In use as the IA_LAUDO module inside Legal-HUB.
+notes:
+  pt: Este repositório é uma versão pública do projeto, sem os documentos e configurações internos da organização.
+  en: This repository is a public version of the project, without the organization's internal documents and settings.
+category: tool
+status: production
+featured: true
+order: 5
+icon: bx-file-find
+hue: 160
+stack: [Python, OpenAI API, python-dotenv, PyInstaller]
+links:
+  repo: https://github.com/Gustavo-AQ/IA-Laudos-OpenAI

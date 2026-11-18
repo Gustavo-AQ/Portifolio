@@ -1,0 +1,44 @@
+title:
+  pt: Portfólio Pessoal
+  en: Personal Portfolio
+summary:
+  pt: Este site. Portfólio bilíngue feito com Astro, com tema claro e escuro, projetos com filtros e paginação e uma versão em texto para IAs.
+  en: This website. Bilingual portfolio built with Astro, with light and dark themes, filterable and paginated projects and a plain text version for AI assistants.
+problem:
+  pt: Recrutadores e empresas precisam avaliar um perfil rápido, inclusive pelo celular. O portfólio reúne apresentação, experiência, projetos e contato em um site leve, acessível e fácil de manter.
+  en: Recruiters and companies need to assess a profile quickly, often on a phone. The portfolio brings together introduction, experience, projects and contact in a site that is light, accessible and easy to maintain.
+features:
+  pt:
+    - Layout pensado primeiro para o celular.
+    - Português e inglês, com URLs próprias por idioma.
+    - Tema claro e escuro que respeita a preferência do sistema.
+    - Projetos em destaque e catálogo com filtros e paginação.
+    - Página de estudo de caso para cada projeto.
+    - Formulário de contato com Web3Forms.
+    - Versão para IA com llms.txt e portfolio.md gerados no build.
+    - Dados estruturados, sitemap e tags hreflang para SEO.
+    - Deploy automático no GitHub Pages com GitHub Actions.
+  en:
+    - Mobile-first layout.
+    - Portuguese and English, with dedicated URLs per language.
+    - Light and dark themes that follow the system preference.
+    - Featured projects plus a catalog with filters and pagination.
+    - Case study page for each project.
+    - Contact form powered by Web3Forms.
+    - AI version with llms.txt and portfolio.md generated at build time.
+    - Structured data, sitemap and hreflang tags for SEO.
+    - Automatic deploy to GitHub Pages with GitHub Actions.
+results:
+  pt:
+    - Publicado com domínio próprio em me.gaqtech.dev.
+  en:
+    - Live on a custom domain at me.gaqtech.dev.
+category: app
+status: production
+order: 15
+icon: bx-user-pin
+hue: 135
+stack: [Astro, TypeScript, CSS, GitHub Actions, GitHub Pages, Web3Forms]
+links:
+  repo: https://github.com/Gustavo-AQ/Portifolio
+  demo: https://me.gaqtech.dev/

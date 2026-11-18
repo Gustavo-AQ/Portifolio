@@ -4,108 +4,80 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Static portfolio website hosted on GitHub Pages at `me.gaqtech.dev`. No build step, no package manager, no test suite — changes to `index.html` and files under `assets/` and `projects/` are deployed directly via `git push` to the `master` branch.
+Bilingual (pt-BR default, en) personal portfolio at `me.gaqtech.dev`, built with **Astro 7** as a fully static site and deployed to GitHub Pages through GitHub Actions. Planned later: es and fr locales; possible migration to Next.js on Vercel or to the owner's Oracle ARM server (Coolify, Cloudflare DNS).
+
+## Commands
+
+```bash
+npm install
+npm run dev         # dev server on :4321
+npm run build       # astro check (types) + astro build -> dist/
+npm run build:fast  # build without type check
+npm run preview
+```
+
+Node >= 22.12. There is no test suite; `npm run build` is the gate (it validates the content schema and types).
 
 ## Deployment
 
-```bash
-git add .
-git commit -m "message"
-git push origin master
-```
-
-GitHub Pages serves from the root of `master`. The custom domain is configured in `CNAME` (`me.gaqtech.dev`).
+`.github/workflows/deploy.yml` builds on every push/PR to `master` and deploys `dist/` to GitHub Pages on push. Repo setting **Pages → Source** must be **GitHub Actions**. `public/CNAME` keeps the custom domain.
 
 ## Hard Constraints
 
-- **Bootstrap 4** — do NOT migrate to Bootstrap 5
-- **No build step** — static HTML/CSS/JS only; no npm, no bundler
-- **Profile photo** (`profile_2026.jpeg`) must NOT have `loading="lazy"` — it is above the fold
-- **GA/GTM** — only a commented-out placeholder in `index.html`; do NOT insert real IDs
-- **OpenAI logo** stays local at `assets/img/openai-vector.svg` — NOT on CDN
-- **AOS** is vendored locally at `assets/vendor/aos/` — do NOT switch back to unpkg CDN
+- **Static output only**: no SSR adapter, no server endpoints at runtime. Endpoints in `src/pages/*.ts` are prerendered files.
+- **No UI framework on the client**: Astro components + small vanilla `<script>` blocks. Don't add React/Vue/jQuery/Bootstrap.
+- **No em dash ("—") in any user-facing copy** (owner preference). Use commas, periods, colons or "a/to". En dash "–" only in date ranges.
+- **Every user-facing string exists in both `pt` and `en`**. UI strings in `src/i18n/ui.ts`; content in `src/data/profile.ts` and the project YAMLs.
+- **Profile photo in the hero is `loading="eager"`** (above the fold). The source image `src/assets/img/profile.jpg` has EXIF stripped; keep it that way.
+- **GA4 ID `G-PG7DWB3S52` is the owner's real ID**; keep it in `site.gaId`.
+- **OpenAI logo stays local** at `public/img/logos/openai.svg`. Skill logos are self-hosted devicons in `public/img/skills/` (no CDN).
+- **Web3Forms access key** goes in `site.web3formsKey` (public by design). Empty key = form shows the email fallback on submit.
 
 ## Architecture
 
-### Single-page structure
+```
+src/
+  content.config.ts        # zod schema for the projects collection
+  content/projects/*.yaml  # one file per project; filename = slug
+  data/profile.ts          # site config, about, experience, education, certs, skills
+  i18n/ui.ts, utils.ts     # UI strings, URL helpers (homeUrl, projectUrl, aiPageUrl, markdownUrl)
+  lib/projects.ts          # getProjects/getFeatured/getCatalog, CATALOG_PAGE_SIZE, CATALOG_INCLUDES_FEATURED
+  lib/markdown.ts          # builds portfolio markdown + llms.txt from the same data
+  lib/icons.ts             # inlines Boxicons SVGs at build time (getIcon)
+  layouts/Base.astro       # head (SEO, hreflang, OG, JSON-LD, theme script, GA4), header, footer
+  components/              # Header, Hero, About, Projects, ProjectCard, ProjectCover, Experience,
+                           # Skills, Education, Contact, Footer, HomePage, ProjectPage, AiPage, Icon
+  pages/                   # index (pt), en/index, projetos/[slug], en/projects/[slug], ia/, en/ai/,
+                           # portfolio.md, en/portfolio.md, llms.txt, llms-full.txt, 404
+  styles/global.css        # tokens + base + shared utilities
+public/                    # CNAME, favicon, manifest, robots.txt, og.png, img/, projects/*.html (old-URL redirects)
+```
 
-All content lives in `index.html`. Sections are anchored with IDs and navigated via smooth scroll:
+### Routing / i18n
 
-- `#header` — hero with Typed.js cycling effect + 2-column layout (code block on right at ≥1200px)
-- `#about` — bio text + interests icon grid
-- `#education` — institution cards + certifications portfolio grid (Isotope)
-- `#experience` — job timeline entries
-- `#portfolio` — project cards filtered by Isotope (`.filter-app` / `.filter-project`)
-- `#skills` — tiered logo rows (devicons CDN) + styled tag spans for metodologias/idiomas
-- `#links` — CV download + GitHub
-- `#contacts` — location, social, email
+Astro i18n with `defaultLocale: 'pt'`, `prefixDefaultLocale: false`. pt lives at `/`, en at `/en/`. Localized path segments: `projetos`/`projects`, `ia`/`ai`. Always build URLs through `src/i18n/utils.ts`. Each page passes `alternates` to `Base` for hreflang tags and the language menu (a `<details>` dropdown that scales to more languages).
 
-### Hero — 2-column layout (desktop ≥1200px)
+To add a locale (es, fr): add it to `languages` and `ui` in `src/i18n/ui.ts`, to `astro.config.mjs` (i18n + sitemap), add the key to the `text`/`list` schemas in `content.config.ts` and to every YAML and `profile.ts` entry, then create `src/pages/<lang>/...` route files mirroring `en/`.
 
-The hero wraps content in two elements inside `.container`:
-- `.hero-content` — h1 + nav (takes the left side, `flex: 1 1 auto`)
-- `.hero-decorative` — decorative code block (positioned `absolute`, `right: 0`, `pointer-events: none`)
+### Projects
 
-**Sticky navbar (`header-top` class):** uses `display: contents` on `.hero-content` to make h1 and nav direct children of `.container` again, restoring original single-row layout. The decorative block is hidden (`display: none !important`).
+- Schema fields: `title, summary, problem, features, results?, metrics?, sections?, notes?` (all `{pt, en}`), `category: app|tool`, `status: production|development|completed`, `featured`, `private`, `order`, `icon` (Boxicons name), `hue` (0-360, generated cover gradient), `stack[]`, `links{repo,demo,store}`, `cover?`, `screenshots?[{src, alt}]` (paths relative to the YAML, images in `src/assets/projects/<slug>/`).
+- Featured projects render in a scroll-snap carousel. The catalog below shows the non-featured ones (`CATALOG_INCLUDES_FEATURED = false`) with category filters and client-side pagination (`CATALOG_PAGE_SIZE = 3`). Without JS the full list is shown.
+- Private projects show a lock badge and a private-note box on the detail page; never add repo links for them.
+- Copy rule: publish facts only. Don't publish "no metrics documented"-style caveats; omit the field instead.
 
-Do not use `flex-wrap` on `#header.header-top` — it breaks the sticky nav layout.
+### Theme
 
-### Project detail pages (`projects/*.html`)
+Dark is the brand default. Tokens on `:root` (dark), `:root[data-theme='light']`, and a `prefers-color-scheme` fallback for no-JS. An inline head script sets `data-theme` before paint from `localStorage.theme` or the system preference; the header toggle flips it.
 
-Each project opens as an iframe lightbox via **Venobox** (`data-vbtype="iframe"`). All detail pages share the same structure:
-- `tech-badge` spans for the stack
-- A commented-out screenshots block (uncomment + add images to `assets/img/project/details/<project-name>/`)
-- A commented-out YouTube/Loom video embed block
-- A "Sobre o Projeto" narrative section
+## Colors
 
-To add a new project:
-1. Add a card in `index.html` `#portfolio` with class `filter-app` or `filter-project`
-2. Create `projects/<slug>.html` following the pattern of `projects/chatbotai.html`
-3. Create `assets/img/project/details/<slug>/` and drop screenshots there, then uncomment the screenshot block
-
-### Private projects
-
-Use a badge inline in the card title and a locked-info box at the bottom of the detail page. See `projects/legalhub.html` for the pattern.
-
-### Skills section — proficiency tiers + devicons
-
-The `#skills` section groups logos by proficiency tier. Each `.skill-tier` row has:
-- A colored label (`.skill-tier-label`): `adv` = `#12d640`, `int` = `#ffc107`, `bas` = `#6c757d`
-- A `.skill-tier-logos` div with `<img>` tags from devicons CDN (`cdn.jsdelivr.net/gh/devicons/devicon@latest`)
-
-**Logo visibility rules on dark background (`#010e1b`):**
-- Logos with dark colors (e.g. Django `plain-wordmark`, Linux Tux) need `style="filter: brightness(0) invert(1);"` to appear white
-- Next.js uses `style="filter: invert(1);"` (inverts black to white)
-- Wordmark variants (e.g. `python-original-wordmark`, `nodejs-plain-wordmark`) are preferred over icon-only for readability
-- Do not restore the old single flat `<p>` of logos — the tiered grouping is intentional
-
-### CSS/JS vendors (all local, no CDN for core libs)
-
-`assets/vendor/` holds: Bootstrap 4, jQuery, Isotope, Owl Carousel, Venobox, Typed.js, Boxicons, Remixicon, Icofont, Waypoints, CounterUp, jQuery Easing, **AOS 2.3.4**.
-
-`assets/css/style.css` — single custom stylesheet. Key additions from visual renovation:
-- Dark theme: `#12d640` green accent, `#010e1b` background
-- Navbar blur (`backdrop-filter: blur(10px)`) when `.header-top`
-- Section titles: `border-left: 3px solid #12d640; padding-left: 10px` on `.section-title h2`
-- Card hover: `translateY(-6px)` + green box-shadow on `.portfolio-item .portfolio-wrap:hover`
-- Scroll-to-top button: fixed bottom-right, appears after 300px, `#12d640` background
-- Certification visual differentiation: `.cert-azure` (blue border), `.cert-db` (orange), `.cert-ml` (green)
-- Skill tiers: `.skill-tier.adv/int/bas` with colored backgrounds and borders
-
-`assets/js/main.js` — custom JS: nav toggle, Isotope filtering, skill bar animation (Waypoints), Typed.js init.
-
-### Certification/logo images
-
-`assets/img/certification/` — local logos for cert cards. `assets/img/education/` — institution logos. `assets/img/project/` — project thumbnail images used in the grid cards.
-
-## Colors (design tokens in style.css)
-
-| Token | Value | Usage |
-|---|---|---|
-| Primary accent | `#12d640` | Links, highlights, badges, adv tier |
-| Dark accent | `#1c7d32` | Hover states |
-| Gold | `#9e7f25` | Section titles underline |
-| Background | `#010e1b` | Page background |
-| Card background | `#09203a` | `.icon-box` cards |
-| Int tier | `#ffc107` | Intermediário label/border |
-| Bas tier | `#6c757d` | Básico label/border |
+| Token | Dark | Light | Usage |
+|---|---|---|---|
+| `--accent` | `#12d640` | `#12d640` | Buttons, highlights, adv tier |
+| `--accent-text` | `#12d640` | `#087a26` | Accent text (AA contrast on light) |
+| `--bg` | `#010e1b` | `#f5f7fa` | Page background |
+| `--surface` | `#061a2e` | `#ffffff` | Cards |
+| `--tier-int` | `#ffc107` | `#a87700` | Intermediate tier |
+| `--tier-bas` | `#8b97a4` | `#5d6a77` | Basic tier |
+| `--gold` | `#c9a33a` | `#8a6d17` | Featured star, private note icon |

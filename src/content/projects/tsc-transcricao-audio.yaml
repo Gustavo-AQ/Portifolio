@@ -1,0 +1,57 @@
+title:
+  pt: TSC, Bot de Transcrição de Áudio
+  en: TSC, Audio Transcription Bot
+summary:
+  pt: Bot do Telegram que transcreve mensagens de voz com IA rodando localmente (whisper.cpp) em um servidor ARM, sem custo por requisição.
+  en: Telegram bot that transcribes voice messages with AI running locally (whisper.cpp) on an ARM server, with no per-request cost.
+problem:
+  pt: Serviços de transcrição cobram por requisição. O TSC transcreve áudios com processamento local de IA em um servidor ARM de recursos limitados, mantendo o custo fixo e os dados no próprio ambiente.
+  en: Transcription services charge per request. TSC transcribes audio with local AI processing on a resource-limited ARM server, keeping costs fixed and data in its own environment.
+features:
+  pt:
+    - Recebe mensagens de voz pelo Telegram, inclusive áudios encaminhados do WhatsApp.
+    - Transcrição local com whisper.cpp.
+    - Integração entre Telegram, n8n e uma API de transcrição.
+    - Resposta automática com o texto transcrito.
+    - Controle de acesso por identificação do usuário.
+    - Comandos administrativos para gerenciar permissões.
+    - Modelo Whisper escolhido por variável de ambiente no Coolify.
+    - Imagem Docker compilada nativamente para ARM64.
+    - API interna protegida, sem exposição pública direta.
+  en:
+    - Receives Telegram voice messages, including audio forwarded from WhatsApp.
+    - Local transcription with whisper.cpp.
+    - Integration between Telegram, n8n and a transcription API.
+    - Automatic reply with the transcribed text.
+    - Access control by user ID.
+    - Admin commands to manage permissions.
+    - Whisper model selected by an environment variable in Coolify.
+    - Docker image compiled natively for ARM64.
+    - Internal API protected from direct public exposure.
+metrics:
+  - value: 2 OCPUs
+    label:
+      pt: servidor Oracle ARM64 onde o serviço roda
+      en: Oracle ARM64 server running the service
+  - value: 120 s
+    label:
+      pt: duração máxima configurada por áudio
+      en: configured max length per audio
+  - value: 19 MB
+    label:
+      pt: tamanho máximo de arquivo
+      en: max file size
+results:
+  pt:
+    - Versão inicial operacional em produção, com endpoint /health validado.
+    - Modelo base como padrão, com reserva de até 1,5 CPU e 3 GiB de RAM.
+  en:
+    - Initial version running in production, with a validated /health endpoint.
+    - Base model by default, reserving up to 1.5 CPU and 3 GiB of RAM.
+category: app
+status: production
+private: true
+order: 12
+icon: bx-microphone
+hue: 200
+stack: [whisper.cpp, C/C++, Docker, Docker Compose, n8n, Telegram Bot API, Coolify, Linux ARM64]

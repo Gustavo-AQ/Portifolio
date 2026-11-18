@@ -1,0 +1,47 @@
+title:
+  pt: GAQ Tools
+  en: GAQ Tools
+summary:
+  pt: Hub de ferramentas online com calculadora salarial multimoeda, conversor de fusos horários e validador de JSON que roda no navegador.
+  en: Online tools hub with a multi-currency salary calculator, time zone converter and a JSON validator that runs in the browser.
+problem:
+  pt: Profissionais e desenvolvedores alternam entre vários sites para fazer cálculos salariais, converter horários e tratar JSON. O GAQ Tools reúne essas ferramentas em uma única interface.
+  en: Professionals and developers jump between several websites to calculate salaries, convert time zones and handle JSON. GAQ Tools brings these tools together in a single interface.
+features:
+  pt:
+    - Calculadora de salário por hora, semana, mês e ano.
+    - Conversão entre moedas com consulta de câmbio.
+    - Configuração de jornadas e semanas remuneradas.
+    - Conversor de fusos horários com data, hora e diferença UTC.
+    - Comparação de expedientes e disponibilidade entre localidades.
+    - Tratamento das transições de horário de verão.
+    - Validação, formatação e minificação de JSON.
+    - JSON processado localmente no navegador, sem envio ao servidor.
+    - Interface responsiva com navegação entre ferramentas.
+  en:
+    - Salary calculator per hour, week, month and year.
+    - Currency conversion with live exchange rates.
+    - Configurable work hours and paid weeks.
+    - Time zone converter with date, time and UTC offset.
+    - Compare working hours and availability across locations.
+    - Handles daylight saving time transitions.
+    - JSON validation, formatting and minification.
+    - JSON processed locally in the browser, never sent to a server.
+    - Responsive interface with navigation between tools.
+results:
+  pt:
+    - 3 ferramentas principais, salários, fusos horários e JSON.
+    - Conversão salarial com 8 moedas.
+    - Testes automatizados para cálculos, câmbio, datas e regras de fuso horário.
+  en:
+    - 3 main tools, salary, time zones and JSON.
+    - Salary conversion across 8 currencies.
+    - Automated tests for calculations, exchange rates, dates and time zone rules.
+category: app
+status: production
+order: 11
+icon: bx-wrench
+hue: 275
+stack: [React, TypeScript, Vite, React Router, Node.js, Temporal API (polyfill), Exchange Rate API]
+links:
+  repo: https://github.com/Gustavo-AQ/gaq-tools

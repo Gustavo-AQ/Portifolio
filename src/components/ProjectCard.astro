@@ -1,0 +1,101 @@
+---
+import Icon from './Icon.astro';
+import ProjectCover from './ProjectCover.astro';
+import type { Project } from '../lib/projects';
+import type { Lang } from '../i18n/ui';
+import { useTranslations, projectUrl } from '../i18n/utils';
+
+interface Props {
+  project: Project;
+  lang: Lang;
+  variant?: 'featured' | 'compact';
+  headingLevel?: 'h3' | 'h4';
+}
+const { project, lang, variant = 'compact', headingLevel: H = 'h3' } = Astro.props;
+const t = useTranslations(lang);
+const d = project.data;
+const href = projectUrl(lang, project.id);
+const maxStack = variant === 'featured' ? 5 : 3;
+const stack = d.stack.slice(0, maxStack);
+const more = d.stack.length - stack.length;
+---
+
+<article class:list={['card', 'project-card', `is-${variant}`]}>
+  <div class="pc-cover">
+    <ProjectCover project={project} lang={lang} size={variant === 'featured' ? 'lg' : 'sm'} />
+  </div>
+  <div class="pc-body">
+    <div class="pc-badges">
+      <span class:list={['badge', `badge-${d.status}`]}>{t(`projects.status.${d.status}`)}</span>
+      {d.private && <span class="badge badge-private"><Icon name="bx-lock-alt" size={12} />{t('projects.private')}</span>}
+      <span class="pc-category">{t(`projects.category.${d.category}`)}</span>
+    </div>
+    <H class="pc-title"><a href={href} class="pc-link">{d.title[lang]}</a></H>
+    <p class="pc-summary">{d.summary[lang]}</p>
+    {
+      stack.length > 0 && (
+        <ul class="chip-list pc-stack" aria-label={t('project.stack')}>
+          {stack.map((s) => <li class="chip">{s}</li>)}
+          {more > 0 && <li class="chip">+{more}</li>}
+        </ul>
+      )
+    }
+    <div class="pc-footer">
+      <span class="pc-more">{t('projects.details')}<Icon name="bx-right-arrow-alt" size={18} /></span>
+      <span class="pc-ext">
+        {d.links.repo && <a href={d.links.repo} target="_blank" rel="noopener" aria-label={`${t('project.repo')}: ${d.title[lang]}`}><Icon name="bxl-github" size={18} /></a>}
+        {d.links.demo && <a href={d.links.demo} target="_blank" rel="noopener" aria-label={`${t('project.demo')}: ${d.title[lang]}`}><Icon name="bx-link-external" size={18} /></a>}
+        {d.links.store && <a href={d.links.store} target="_blank" rel="noopener" aria-label={`${t('project.store')}: ${d.title[lang]}`}><Icon name="bxl-chrome" size={18} /></a>}
+      </span>
+    </div>
+  </div>
+</article>
+
+<style>
+  .project-card { position: relative; display: flex; flex-direction: column; overflow: hidden; height: 100%; }
+  .project-card:hover { border-color: var(--accent-ring); transform: translateY(-4px); box-shadow: var(--shadow), 0 0 0 1px var(--accent-soft); }
+  .project-card:focus-within { border-color: var(--accent-ring); }
+  .pc-cover { overflow: hidden; }
+  .pc-cover :global(.cover) { transition: transform 0.5s var(--ease); }
+  .project-card:hover .pc-cover :global(.cover) { transform: scale(1.04); }
+  .pc-body { display: flex; flex-direction: column; gap: 10px; padding: 18px; flex: 1; }
+  .pc-badges { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
+  .pc-category { font-size: 0.74rem; color: var(--text-faint); font-family: var(--font-mono); margin-left: auto; }
+  .pc-title { font-size: 1.2rem; font-weight: 600; }
+  .pc-link { color: var(--text); }
+  .pc-link:hover { text-decoration: none; }
+  .pc-link::after { content: ''; position: absolute; inset: 0; z-index: 1; }
+  .pc-link:focus-visible { outline: none; }
+  .pc-link:focus-visible::after { outline: 2px solid var(--accent-ring); outline-offset: -2px; border-radius: var(--radius); }
+  .pc-summary {
+    color: var(--text-muted); font-size: 0.93rem; line-height: 1.55;
+    display: -webkit-box; -webkit-line-clamp: 3; line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;
+  }
+  .pc-footer { display: flex; align-items: center; justify-content: space-between; margin-top: auto; padding-top: 6px; }
+  .pc-more { display: inline-flex; align-items: center; gap: 4px; font-weight: 600; font-size: 0.9rem; color: var(--accent-text); }
+  .project-card:hover .pc-more :global(.icon) { transform: translateX(3px); }
+  .pc-more :global(.icon) { transition: transform 0.2s var(--ease); }
+  .pc-ext { position: relative; z-index: 2; display: flex; gap: 4px; }
+  .pc-ext a { display: grid; place-items: center; width: 34px; height: 34px; border-radius: 10px; color: var(--text-muted); }
+  .pc-ext a:hover { color: var(--accent-text); background: var(--surface-2); }
+
+  /* Compacto: horizontal no celular, vertical em telas largas */
+  .is-compact { flex-direction: row; }
+  .is-compact .pc-cover { width: 92px; flex: none; }
+  .is-compact .pc-body { padding: 14px 14px 12px; gap: 8px; min-width: 0; }
+  .is-compact .pc-title { font-size: 1.05rem; }
+  .is-compact .pc-summary { -webkit-line-clamp: 2; line-clamp: 2; font-size: 0.88rem; }
+  .is-compact .pc-category { display: none; }
+  .is-compact .pc-stack { display: none; }
+  @media (min-width: 560px) {
+    .is-compact .pc-cover { width: 132px; }
+    .is-compact .pc-category { display: inline; }
+    .is-compact .pc-stack { display: flex; }
+  }
+  @media (min-width: 960px) {
+    .is-compact { flex-direction: column; }
+    .is-compact .pc-cover { width: auto; height: 120px; }
+    .is-compact .pc-body { padding: 18px; gap: 10px; }
+    .is-compact .pc-summary { -webkit-line-clamp: 3; line-clamp: 3; }
+  }
+</style>

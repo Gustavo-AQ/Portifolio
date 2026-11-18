@@ -1,0 +1,210 @@
+---
+import Icon from './Icon.astro';
+import type { Lang } from '../i18n/ui';
+import { useTranslations } from '../i18n/utils';
+import { site } from '../data/profile';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+---
+
+<section class="section section-alt" id="contact" aria-labelledby="contact-title">
+  <div class="container">
+    <div class="section-head" data-reveal>
+      <span class="kicker">{t('contact.kicker')}</span>
+      <h2 class="section-title" id="contact-title">{t('contact.title')}</h2>
+      <p class="section-lead">{t('contact.lead')}</p>
+    </div>
+
+    <div class="contact-grid">
+      <ul class="channels" data-reveal>
+        <li class="card channel">
+          <span class="ch-icon"><Icon name="bx-envelope" size={22} /></span>
+          <span class="ch-body">
+            <small>{t('contact.form.email')}</small>
+            <a href={`mailto:${site.email}`}>{site.email}</a>
+          </span>
+          <button class="icon-btn copy-btn" type="button" data-copy={site.email} data-done={t('contact.copied')} aria-label={t('contact.copy')} title={t('contact.copy')}>
+            <Icon name="bx-copy" size={18} />
+          </button>
+        </li>
+        <li class="card channel">
+          <span class="ch-icon"><Icon name="bxl-linkedin" size={22} /></span>
+          <span class="ch-body">
+            <small>LinkedIn</small>
+            <a href={site.linkedin} target="_blank" rel="noopener" class="stretch">/in/gustavoaquinup2005</a>
+          </span>
+          <Icon name="bx-link-external" size={18} class="ch-ext" />
+        </li>
+        <li class="card channel">
+          <span class="ch-icon"><Icon name="bxl-github" size={22} /></span>
+          <span class="ch-body">
+            <small>GitHub</small>
+            <a href={site.github} target="_blank" rel="noopener" class="stretch">@Gustavo-AQ</a>
+          </span>
+          <Icon name="bx-link-external" size={18} class="ch-ext" />
+        </li>
+        <li class="card channel">
+          <span class="ch-icon"><Icon name="bx-map" size={22} /></span>
+          <span class="ch-body">
+            <small>{t('contact.location')}</small>
+            <span>{site.location[lang]}</span>
+          </span>
+        </li>
+        <li class="card channel">
+          <span class="ch-icon"><Icon name="bx-file" size={22} /></span>
+          <span class="ch-body">
+            <small>{t('nav.cv')}</small>
+            <a href={site.cv} target="_blank" rel="noopener" class="stretch">PDF</a>
+          </span>
+          <Icon name="bx-link-external" size={18} class="ch-ext" />
+        </li>
+      </ul>
+
+      <form
+        class="card contact-form"
+        action="https://api.web3forms.com/submit"
+        method="POST"
+        data-contact-form
+        data-key={site.web3formsKey}
+        data-reveal
+      >
+        <input type="hidden" name="access_key" value={site.web3formsKey} />
+        <input type="hidden" name="subject" value={t('contact.form.subject')} />
+        <input type="hidden" name="from_name" value="me.gaqtech.dev" />
+        <input type="checkbox" name="botcheck" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true" />
+
+        <div class="row">
+          <label class="field">
+            <span>{t('contact.form.name')}</span>
+            <input type="text" name="name" required autocomplete="name" maxlength="120" />
+          </label>
+          <label class="field">
+            <span>{t('contact.form.email')}</span>
+            <input type="email" name="email" required autocomplete="email" maxlength="160" />
+          </label>
+        </div>
+        <label class="field">
+          <span>{t('contact.form.company')}</span>
+          <input type="text" name="company" autocomplete="organization" maxlength="120" />
+        </label>
+        <label class="field">
+          <span>{t('contact.form.message')}</span>
+          <textarea name="message" rows="5" required maxlength="4000"></textarea>
+        </label>
+        <button class="btn btn-primary submit" type="submit" data-sending={t('contact.form.sending')}>
+          <Icon name="bx-send" size={18} /><span class="label">{t('contact.form.send')}</span>
+        </button>
+        <p class="form-status" role="status" aria-live="polite" hidden></p>
+        <template data-success>{t('contact.form.success')}</template>
+        <template data-error>{t('contact.form.error')} <a href={`mailto:${site.email}`}>{site.email}</a>.</template>
+      </form>
+    </div>
+  </div>
+</section>
+
+<script>
+  // Copiar e-mail
+  document.querySelectorAll<HTMLButtonElement>('[data-copy]').forEach((btn) => {
+    btn.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(btn.dataset.copy ?? '');
+        const prev = btn.title;
+        btn.title = btn.dataset.done ?? '';
+        btn.classList.add('done');
+        setTimeout(() => { btn.title = prev; btn.classList.remove('done'); }, 1600);
+      } catch {
+        window.location.href = `mailto:${btn.dataset.copy}`;
+      }
+    });
+  });
+
+  // Envio pelo Web3Forms sem sair da página
+  document.querySelectorAll<HTMLFormElement>('[data-contact-form]').forEach((form) => {
+    const status = form.querySelector<HTMLElement>('.form-status')!;
+    const submit = form.querySelector<HTMLButtonElement>('.submit')!;
+    const label = submit.querySelector<HTMLElement>('.label')!;
+    const original = label.textContent;
+    const show = (tpl: string, ok: boolean) => {
+      const node = form.querySelector<HTMLTemplateElement>(`template[data-${tpl}]`);
+      status.replaceChildren(node ? node.content.cloneNode(true) : document.createTextNode(''));
+      status.classList.toggle('ok', ok);
+      status.classList.toggle('err', !ok);
+      status.hidden = false;
+    };
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      if (!form.reportValidity()) return;
+      if (!form.dataset.key) return show('error', false);
+      submit.disabled = true;
+      label.textContent = submit.dataset.sending ?? '...';
+      try {
+        const data = Object.fromEntries(new FormData(form).entries());
+        const res = await fetch(form.action, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+          body: JSON.stringify(data),
+        });
+        const json = await res.json().catch(() => ({}));
+        if (res.ok && json.success) {
+          form.reset();
+          show('success', true);
+          (window as any).gtag?.('event', 'contact_form_submit');
+        } else {
+          show('error', false);
+        }
+      } catch {
+        show('error', false);
+      } finally {
+        submit.disabled = false;
+        label.textContent = original;
+      }
+    });
+  });
+</script>
+
+<style>
+  .contact-grid { display: grid; gap: 16px; }
+  .channels { list-style: none; display: grid; gap: 10px; align-content: start; }
+  .channel { position: relative; display: flex; align-items: center; gap: 14px; padding: 14px 16px; }
+  .channel:hover { border-color: var(--accent-ring); }
+  .ch-icon { display: grid; place-items: center; width: 44px; height: 44px; flex: none; border-radius: 12px; background: var(--accent-soft); color: var(--accent-text); }
+  .ch-body { display: flex; flex-direction: column; min-width: 0; flex: 1; font-weight: 500; overflow-wrap: anywhere; }
+  .ch-body small { color: var(--text-faint); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.06em; font-weight: 500; }
+  .ch-body a { color: var(--text); }
+  .channel:hover .ch-body a { color: var(--accent-text); }
+  .stretch::after { content: ''; position: absolute; inset: 0; border-radius: var(--radius); }
+  .channel :global(.ch-ext) { color: var(--text-faint); }
+  .copy-btn { position: relative; z-index: 1; }
+  .copy-btn.done { color: var(--accent-text); border-color: var(--accent); }
+
+  .contact-form { padding: 20px; display: grid; gap: 14px; align-content: start; }
+  .row { display: grid; gap: 14px; }
+  .field { display: grid; gap: 6px; }
+  .field span { font-size: 0.85rem; font-weight: 600; color: var(--text-muted); }
+  .field input, .field textarea {
+    width: 100%; font: inherit; font-size: 1rem; color: var(--text); background: var(--bg); border: 1px solid var(--border-strong);
+    border-radius: 12px; padding: 12px 14px; transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .field textarea { resize: vertical; min-height: 130px; }
+  .field input:focus, .field textarea:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+  .hp { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; }
+  .submit { width: 100%; }
+  .submit:disabled { opacity: 0.7; cursor: progress; }
+  .form-status { padding: 12px 14px; border-radius: 12px; font-size: 0.92rem; }
+  .form-status.ok { background: var(--accent-soft); color: var(--accent-text); border: 1px solid rgba(18, 214, 64, 0.3); }
+  .form-status.err { background: rgba(255, 107, 107, 0.1); color: var(--danger); border: 1px solid rgba(255, 107, 107, 0.3); }
+
+  @media (min-width: 640px) {
+    .row { grid-template-columns: 1fr 1fr; }
+    .contact-form { padding: 26px; }
+    .submit { width: auto; justify-self: start; }
+  }
+  @media (min-width: 960px) {
+    .contact-grid { grid-template-columns: 0.9fr 1.1fr; gap: 20px; }
+  }
+</style>
