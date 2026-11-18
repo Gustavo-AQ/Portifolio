@@ -1,0 +1,200 @@
+---
+import { Image } from 'astro:assets';
+import Icon from './Icon.astro';
+import profile from '../assets/img/profile.jpg';
+import type { Lang } from '../i18n/ui';
+import { useTranslations } from '../i18n/utils';
+import { site } from '../data/profile';
+import { getProjects } from '../lib/projects';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const roles = t('hero.roles');
+const projects = await getProjects();
+const inProduction = projects.filter((p) => p.data.status === 'production').length;
+---
+
+<section class="hero" aria-labelledby="hero-title">
+  <div class="hero-glow" aria-hidden="true"></div>
+  <div class="container hero-grid">
+    <div class="hero-content">
+      <Image
+        src={profile}
+        alt={site.name}
+        width={112}
+        height={112}
+        densities={[1, 2]}
+        loading="eager"
+        fetchpriority="high"
+        class="hero-avatar"
+      />
+      <span class="hero-badge"><span class="pulse" aria-hidden="true"></span>{t('hero.badge')}</span>
+      <p class="hero-hello">{t('hero.hello')}</p>
+      <h1 id="hero-title" class="hero-title">{site.name}</h1>
+      <p class="hero-role">
+        {t('hero.iam')}{' '}
+        <span class="typed" data-roles={JSON.stringify(roles)} aria-hidden="true">{roles[0]}</span>
+        <span class="sr-only">{roles.join(', ')}</span>
+      </p>
+      <p class="hero-tagline">{t('hero.tagline')}</p>
+      <div class="hero-ctas">
+        <a class="btn btn-primary" href="#projects">{t('hero.cta.projects')}<Icon name="bx-right-arrow-alt" size={20} /></a>
+        <a class="btn btn-ghost" href="#contact">{t('hero.cta.contact')}</a>
+      </div>
+      <div class="hero-social">
+        <a class="icon-btn" href={site.linkedin} target="_blank" rel="noopener" aria-label="LinkedIn"><Icon name="bxl-linkedin" size={20} /></a>
+        <a class="icon-btn" href={site.github} target="_blank" rel="noopener" aria-label="GitHub"><Icon name="bxl-github" size={20} /></a>
+        <a class="icon-btn" href={`mailto:${site.email}`} aria-label="E-mail"><Icon name="bx-envelope" size={20} /></a>
+        <a class="cv-link" href={site.cv} target="_blank" rel="noopener"><Icon name="bx-file" size={18} />{t('nav.cv')}</a>
+      </div>
+    </div>
+
+    <div class="hero-visual" aria-hidden="true">
+      <div class="code-window">
+        <div class="code-bar"><span></span><span></span><span></span><em>gustavo.py</em></div>
+        <pre class="code"><code><span class="c"># {site.name}, dev</span>
+<span class="k">from</span> skills <span class="k">import</span> Python, React, AI, n8n
+
+<span class="k">def</span> <span class="fn">build_solution</span>(problem):
+    tools <span class="o">=</span> [Python, React, AI, n8n]
+    <span class="k">return</span> <span class="fn">automate</span>(problem, tools)
+
+result <span class="o">=</span> <span class="fn">build_solution</span>(
+    <span class="s">"Legal-HUB"</span>
+)
+<span class="c"># → deployed to production ✓</span><span class="cursor"></span></code></pre>
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+    <dl class="hero-stats">
+      <div><dt>{projects.length}+</dt><dd>{t('hero.stats.projects')}</dd></div>
+      <div><dt>{inProduction}</dt><dd>{t('hero.stats.production')}</dd></div>
+      <div><dt>~70%</dt><dd>{t('hero.stats.impact')}</dd></div>
+    </dl>
+  </div>
+</section>
+
+<script>
+  const el = document.querySelector<HTMLElement>('.typed');
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (el && el.dataset.roles) {
+    const roles: string[] = JSON.parse(el.dataset.roles);
+    let r = 0;
+    let i = roles[0].length;
+    let deleting = true;
+    const tick = () => {
+      const word = roles[r];
+      if (reduce) {
+        r = (r + 1) % roles.length;
+        el.textContent = roles[r];
+        setTimeout(tick, 2600);
+        return;
+      }
+      if (deleting) {
+        i--;
+        el.textContent = word.slice(0, i);
+        if (i <= 0) {
+          deleting = false;
+          r = (r + 1) % roles.length;
+        }
+        setTimeout(tick, 40);
+      } else {
+        const next = roles[r];
+        i++;
+        el.textContent = next.slice(0, i);
+        if (i >= next.length) {
+          deleting = true;
+          setTimeout(tick, 2200);
+        } else {
+          setTimeout(tick, 70);
+        }
+      }
+    };
+    setTimeout(tick, 2200);
+  }
+</script>
+
+<style>
+  .hero { position: relative; overflow: hidden; padding: 32px 0 40px; }
+  .hero-glow {
+    position: absolute; inset: -20% -10% auto auto; width: 70vw; height: 70vw; max-width: 720px; max-height: 720px;
+    background: radial-gradient(circle, var(--accent-soft) 0%, transparent 65%); pointer-events: none;
+  }
+  .hero::before {
+    content: ''; position: absolute; inset: 0; pointer-events: none; opacity: 0.5;
+    background-image: linear-gradient(var(--border) 1px, transparent 1px), linear-gradient(90deg, var(--border) 1px, transparent 1px);
+    background-size: 44px 44px;
+    mask-image: radial-gradient(ellipse at 30% 20%, #000 0%, transparent 70%);
+    -webkit-mask-image: radial-gradient(ellipse at 30% 20%, #000 0%, transparent 70%);
+  }
+  .hero-grid { position: relative; display: grid; gap: 40px; align-items: center; }
+  .hero-content { display: flex; flex-direction: column; align-items: flex-start; }
+
+  .hero-avatar {
+    width: 96px; height: 96px; border-radius: 50%; object-fit: cover; object-position: 50% 20%;
+    border: 3px solid var(--accent); box-shadow: 0 0 0 6px var(--accent-soft); margin-bottom: 20px;
+  }
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px; border-radius: 999px; font-size: 0.82rem; font-weight: 600;
+    color: var(--accent-text); background: var(--accent-soft); border: 1px solid rgba(18, 214, 64, 0.28);
+  }
+  .pulse { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 0 0 var(--accent-ring); animation: pulse 2s infinite; }
+  @keyframes pulse { 70% { box-shadow: 0 0 0 8px transparent; } 100% { box-shadow: 0 0 0 0 transparent; } }
+
+  .hero-hello { margin-top: 22px; color: var(--text-muted); font-family: var(--font-mono); font-size: 0.92rem; }
+  .hero-title { font-size: clamp(2.5rem, 1.6rem + 4.6vw, 4.6rem); font-weight: 700; letter-spacing: -0.03em; margin-top: 4px; }
+  .hero-role { font-size: clamp(1.15rem, 1rem + 0.9vw, 1.6rem); font-family: var(--font-display); font-weight: 500; margin-top: 10px; color: var(--text); min-height: 1.5em; }
+  .typed { color: var(--accent-text); border-right: 2px solid var(--accent); padding-right: 3px; }
+  .hero-tagline { color: var(--text-muted); font-size: 1.04rem; max-width: 56ch; margin-top: 16px; }
+  .hero-ctas { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 26px; width: 100%; }
+  .hero-ctas .btn { flex: 1 1 160px; }
+  .hero-social { display: flex; align-items: center; flex-wrap: wrap; gap: 10px; margin-top: 22px; }
+  .cv-link { display: inline-flex; align-items: center; gap: 6px; margin-left: 6px; font-weight: 600; font-size: 0.92rem; }
+
+  .hero-visual { display: none; }
+  .code-window {
+    background: var(--code-bg); border: 1px solid rgba(148, 178, 210, 0.18); border-radius: var(--radius-lg);
+    box-shadow: var(--shadow), 0 0 0 1px rgba(18, 214, 64, 0.06), 0 30px 80px -40px rgba(18, 214, 64, 0.35); overflow: hidden;
+    transform: perspective(1200px) rotateY(-6deg) rotateX(2deg);
+  }
+  .code-bar { display: flex; align-items: center; gap: 7px; padding: 12px 16px; border-bottom: 1px solid rgba(148, 178, 210, 0.12); }
+  .code-bar span { width: 11px; height: 11px; border-radius: 50%; background: #ff5f57; }
+  .code-bar span:nth-child(2) { background: #febc2e; }
+  .code-bar span:nth-child(3) { background: #28c840; }
+  .code-bar em { margin-left: 10px; font-style: normal; font-family: var(--font-mono); font-size: 0.78rem; color: #71859b; }
+  .code { margin: 0; padding: 22px 24px 26px; font-family: var(--font-mono); font-size: 0.9rem; line-height: 1.75; color: #d6e2ee; overflow-x: auto; }
+  .code .c { color: #6b8299; }
+  .code .k { color: #c792ea; }
+  .code .fn { color: #12d640; }
+  .code .o { color: #89ddff; }
+  .code .s { color: #ffcb6b; }
+  .cursor { display: inline-block; width: 8px; height: 1.1em; background: #12d640; vertical-align: text-bottom; margin-left: 4px; animation: blink 1.1s steps(1) infinite; }
+  @keyframes blink { 50% { opacity: 0; } }
+
+  .hero-stats {
+    position: relative; display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; margin: 40px 0 0;
+    background: var(--border); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden;
+  }
+  .hero-stats div { background: var(--surface); padding: 16px 12px; }
+  .hero-stats dt { font-family: var(--font-display); font-weight: 700; font-size: clamp(1.4rem, 1.1rem + 1.4vw, 2rem); color: var(--accent-text); line-height: 1.1; }
+  .hero-stats dd { margin: 4px 0 0; color: var(--text-muted); font-size: 0.78rem; line-height: 1.35; }
+
+  @media (min-width: 640px) {
+    .hero-ctas { width: auto; }
+    .hero-ctas .btn { flex: none; }
+    .hero-stats div { padding: 20px 24px; }
+    .hero-stats dd { font-size: 0.88rem; }
+  }
+  @media (min-width: 1024px) {
+    .hero { padding: 72px 0 64px; min-height: calc(100svh - var(--header-h)); display: flex; flex-direction: column; justify-content: center; }
+    .hero-grid { grid-template-columns: 1.1fr 1fr; gap: 56px; }
+    .hero-avatar { display: none; }
+    .hero-visual { display: block; }
+    .hero-hello { margin-top: 28px; }
+  }
+</style>

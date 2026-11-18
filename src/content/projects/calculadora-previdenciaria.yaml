@@ -1,0 +1,62 @@
+title:
+  pt: Calculadora Previdenciária
+  en: Social Security Benefits Calculator
+summary:
+  pt: Aplicação web full stack para liquidação de sentenças previdenciárias, com correção monetária, juros de mora, PDF profissional e API REST documentada.
+  en: Full stack web app for calculating Brazilian social security court awards, with monetary correction, interest, professional PDF output and a documented REST API.
+problem:
+  pt: Calcular benefícios previdenciários atrasados exige aplicar índices, juros e regras que mudam ao longo do tempo, um trabalho lento e sujeito a erro quando feito em planilhas. A calculadora automatiza a liquidação e gera a memória de cálculo pronta para o processo.
+  en: Calculating overdue social security benefits means applying indexes, interest and rules that change over time, which is slow and error-prone in spreadsheets. The calculator automates the process and produces a calculation report ready to be filed.
+features:
+  pt:
+    - Cálculo de benefícios atrasados desde a Data de Início do Benefício (DIB), com reajustes anuais automáticos.
+    - Prescrição quinquenal, considerando os 5 anos anteriores ao ajuizamento.
+    - Correção monetária INPC/IBGE aplicada mês a mês.
+    - Juros de mora conforme o Manual da Justiça Federal.
+    - 13º salário proporcional por competência.
+    - Abatimentos de valores já pagos administrativamente.
+    - PDF com memória de cálculo detalhada, pronto para juntada processual.
+    - API REST documentada com Swagger em /docs.
+  en:
+    - Calculates overdue benefits from the benefit start date (DIB), with automatic yearly adjustments.
+    - Five-year statute of limitations, considering the 5 years before filing.
+    - INPC/IBGE monetary correction applied month by month.
+    - Interest according to the Federal Justice Manual.
+    - Proportional 13th salary per period.
+    - Deductions for amounts already paid administratively.
+    - PDF with a detailed calculation report, ready to be filed in court.
+    - REST API documented with Swagger at /docs.
+sections:
+  - title:
+      pt: Benefícios suportados
+      en: Supported benefits
+    items:
+      pt:
+        - "Auxílio-Acidente: 50% do salário de benefício."
+        - "Auxílio-Doença: 91% do salário de benefício."
+        - "Aposentadorias: 100% do salário de benefício."
+      en:
+        - "Accident benefit: 50% of the benefit salary."
+        - "Sickness benefit: 91% of the benefit salary."
+        - "Retirement: 100% of the benefit salary."
+  - title:
+      pt: Infraestrutura de produção
+      en: Production infrastructure
+    items:
+      pt:
+        - Nginx como proxy reverso.
+        - FastAPI com Uvicorn para a API.
+        - Servidor HTTP para o frontend.
+        - Dois serviços gerenciados pelo Systemd em Linux (Ubuntu).
+      en:
+        - Nginx as reverse proxy.
+        - FastAPI with Uvicorn for the API.
+        - HTTP server for the frontend.
+        - Two services managed by Systemd on Linux (Ubuntu).
+category: app
+status: production
+private: true
+order: 9
+icon: bx-calculator
+hue: 45
+stack: [Python, FastAPI, Pandas, FPDF2, Uvicorn, HTML/CSS/JS, Nginx, Linux, Systemd, Swagger]

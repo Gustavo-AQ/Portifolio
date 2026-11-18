@@ -1,0 +1,28 @@
+title:
+  pt: Analisador de Documentos Antifraude
+  en: Anti-fraud Document Analyzer
+summary:
+  pt: Analisa imagens de cartões de crédito com Azure AI Document Intelligence, valida os dados do titular e aponta possíveis inconsistências.
+  en: Analyzes credit card images with Azure AI Document Intelligence, validates cardholder data and flags possible inconsistencies.
+problem:
+  pt: Validar documentos manualmente é lento e abre espaço para fraudes. O analisador automatiza a extração e a validação dos dados de cartões a partir de imagens.
+  en: Validating documents by hand is slow and leaves room for fraud. The analyzer automates extraction and validation of card data from images.
+features:
+  pt:
+    - Upload das imagens para o Azure Blob Storage.
+    - Análise com o serviço de documentos da Azure.
+    - Validação de nome do titular, número, validade e banco emissor.
+    - Interface web com Streamlit.
+  en:
+    - Uploads images to Azure Blob Storage.
+    - Analysis with Azure's document service.
+    - Validation of cardholder name, number, expiry date and issuing bank.
+    - Web interface built with Streamlit.
+category: app
+status: completed
+order: 17
+icon: bx-credit-card
+hue: 210
+stack: [Python, Azure Blob Storage, Azure AI Document Intelligence, Streamlit]
+links:
+  repo: https://github.com/Gustavo-AQ/Analisador-de-documentos

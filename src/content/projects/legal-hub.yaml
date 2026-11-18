@@ -1,0 +1,78 @@
+title:
+  pt: Legal-HUB
+  en: Legal-HUB
+summary:
+  pt: Central desktop de automações jurídicas com 6 módulos ativos e autenticação LDAP, usada diariamente pelo escritório Caique Castro Advocacia.
+  en: Desktop hub for legal automation with 6 active modules and LDAP authentication, used daily by the Caique Castro Advocacia law firm.
+problem:
+  pt: O escritório dependia de tarefas manuais e repetitivas para produzir petições, analisar laudos e gerar relatórios. O Legal-HUB reúne essas automações em um único aplicativo desktop, com login corporativo e módulos independentes.
+  en: The firm relied on repetitive manual work to draft petitions, analyze reports and produce compliance documents. Legal-HUB brings these automations together in a single desktop app with corporate login and independent modules.
+features:
+  pt:
+    - Aplicação desktop com PyWebView, backend em Python e interface HTML/CSS/JS por serviço.
+    - Autenticação via LDAP corporativo.
+    - Build com PyInstaller gerando o executável LEGAL-HUB.exe.
+  en:
+    - Desktop app with PyWebView, Python backend and an HTML/CSS/JS interface per service.
+    - Corporate LDAP authentication.
+    - PyInstaller build producing the LEGAL-HUB.exe executable.
+metrics:
+  - value: '6'
+    label:
+      pt: módulos ativos em produção
+      en: active modules in production
+  - value: '~70%'
+    label:
+      pt: menos tempo na elaboração de petições
+      en: less time drafting petitions
+  - value: 50–100
+    label:
+      pt: documentos gerados por ciclo
+      en: documents generated per cycle
+sections:
+  - title:
+      pt: Módulos ativos
+      en: Active modules
+    items:
+      pt:
+        - "IA_PET_INICIAL: analisa até 6 PDFs e gera petições iniciais completas em DOCX via OpenAI."
+        - "IA_LAUDO: analisa laudos médicos e periciais em PDF via OpenAI e devolve uma síntese estruturada."
+        - "PDF_para_EXCEL: extrai dados de PDFs com pdfplumber e exporta para Excel com openpyxl."
+        - "Analise_pastas: preenche planilhas pela estrutura de pastas e renomeia arquivos em lote, com modo de simulação."
+        - "Gerador_lotes: gera planilhas de integração por evento e consolidadas a partir de templates."
+        - "Relatorio_Conformidade: gera documentos PRECA e RPV automaticamente a partir de uma planilha."
+      en:
+        - "IA_PET_INICIAL: analyzes up to 6 PDFs and generates complete initial petitions in DOCX via OpenAI."
+        - "IA_LAUDO: analyzes medical and expert reports in PDF via OpenAI and returns a structured summary."
+        - "PDF_para_EXCEL: extracts data from PDFs with pdfplumber and exports it to Excel with openpyxl."
+        - "Analise_pastas: fills spreadsheets from the folder structure and batch renames files, with a dry run mode."
+        - "Gerador_lotes: generates integration spreadsheets per event and consolidated, from templates."
+        - "Relatorio_Conformidade: automatically generates PRECA and RPV documents from a spreadsheet."
+  - title:
+      pt: Arquitetura
+      en: Architecture
+    items:
+      pt:
+        - "src/app.py cria a janela PyWebView e expõe a API Python ao frontend (js_api)."
+        - "O frontend chama window.pywebview.api.<método>() para acionar o backend."
+        - "src/backend/webview_api.py valida payloads, abre diálogos nativos e orquestra os serviços."
+        - "Cada serviço em src/services/<Módulo>/ tem seu próprio backend e frontend."
+      en:
+        - "src/app.py creates the PyWebView window and exposes the Python API to the frontend (js_api)."
+        - "The frontend calls window.pywebview.api.<method>() to reach the backend."
+        - "src/backend/webview_api.py validates payloads, opens native dialogs and orchestrates services."
+        - "Each service in src/services/<Module>/ has its own backend and frontend."
+results:
+  pt:
+    - Responsável por cerca de 70% do desenvolvimento.
+    - Usado diariamente pela equipe jurídica.
+  en:
+    - Responsible for about 70% of the development.
+    - Used daily by the legal team.
+category: app
+status: production
+private: true
+order: 8
+icon: bx-buildings
+hue: 140
+stack: [Python, PyWebView, OpenAI, LDAP3, Pandas, pdfplumber, python-docx, openpyxl, PyInstaller, HTML/CSS/JS]

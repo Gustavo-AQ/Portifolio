@@ -1,0 +1,30 @@
+---
+import Base from '../layouts/Base.astro';
+import Icon from '../components/Icon.astro';
+import { useTranslations, homeUrl } from '../i18n/utils';
+
+const t = useTranslations('pt');
+const te = useTranslations('en');
+---
+
+<Base lang="pt" title={t('404.title')} alternates={{ pt: '/', en: '/en/' }} noindex>
+  <section class="nf container">
+    <span class="code">404</span>
+    <h1>{t('404.title')}</h1>
+    <p>{t('404.text')}</p>
+    <p class="en" lang="en">{te('404.title')}. {te('404.text')}</p>
+    <div class="actions">
+      <a class="btn btn-primary" href={homeUrl('pt')}><Icon name="bx-left-arrow-alt" size={18} />{t('404.home')}</a>
+      <a class="btn btn-ghost" href={homeUrl('en')} lang="en">{te('404.home')}</a>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .nf { min-height: 70vh; display: flex; flex-direction: column; justify-content: center; align-items: flex-start; gap: 12px; padding-block: 64px; }
+  .code { font-family: var(--font-mono); font-size: clamp(4rem, 12vw, 8rem); font-weight: 700; color: var(--accent-text); line-height: 1; }
+  h1 { font-size: clamp(1.6rem, 4vw, 2.4rem); }
+  p { color: var(--text-muted); }
+  .en { font-size: 0.92rem; color: var(--text-faint); }
+  .actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 12px; }
+</style>

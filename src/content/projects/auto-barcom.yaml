@@ -1,0 +1,53 @@
+title:
+  pt: Auto BarCOM
+  en: Auto BarCOM
+summary:
+  pt: Automação da emissão fiscal em um sistema legado Windows, importando vendas e emitindo notas em lote para vários estabelecimentos sem intervenção manual.
+  en: Automates tax invoice issuing in a legacy Windows system, importing sales and issuing invoices in batch for multiple stores without manual work.
+problem:
+  pt: Todo dia, alguém precisava entrar no sistema legado BarCOM, importar as vendas do ZIG e emitir as notas fiscais de cada loja, uma a uma. O Auto BarCOM automatiza esse procedimento repetitivo e reduz a necessidade de intervenção humana.
+  en: Every day someone had to log into the legacy BarCOM system, import sales from ZIG and issue tax invoices for each store, one by one. Auto BarCOM automates that repetitive procedure and reduces the need for human intervention.
+features:
+  pt:
+    - Automação de aplicações Windows desenvolvidas em Delphi/VCL.
+    - Login e navegação automatizados no sistema BarCOM.
+    - Importação das vendas registradas pelo sistema ZIG.
+    - Processamento sequencial de vários estabelecimentos.
+    - Emissão de notas fiscais em lote.
+    - Identificação de lojas sem movimentação.
+    - Tratamento de erros com interrupção segura em situações inesperadas.
+    - Modo de teste que interrompe o fluxo antes da emissão fiscal.
+    - Registro estruturado das execuções e das respostas da SEFAZ.
+    - Dashboard com indicadores, histórico e acompanhamento de erros.
+    - Exportação de relatórios em CSV.
+    - Geração de executáveis Windows.
+  en:
+    - Automation of Windows applications built with Delphi/VCL.
+    - Automated login and navigation in the BarCOM system.
+    - Import of sales recorded by the ZIG system.
+    - Sequential processing of multiple stores.
+    - Batch issuing of tax invoices.
+    - Detection of stores with no sales.
+    - Error handling with safe stop on unexpected situations.
+    - Test mode that stops before the actual invoice is issued.
+    - Structured logging of runs and SEFAZ (tax authority) responses.
+    - Dashboard with indicators, history and error tracking.
+    - CSV report export.
+    - Windows executable builds.
+results:
+  pt:
+    - Fluxo fiscal completo validado em produção para 2 estabelecimentos.
+    - Duas etapas principais automatizadas, importação de vendas e emissão em lote.
+    - Tratamento validado para estabelecimentos sem movimentação.
+  en:
+    - Full tax flow validated in production for 2 stores.
+    - Two main steps automated, sales import and batch issuing.
+    - Handling validated for stores with no sales.
+category: tool
+status: production
+featured: true
+private: true
+order: 4
+icon: bx-receipt
+hue: 28
+stack: [Python 3.11+, pywinauto, Win32 API, uv, JSON, PowerShell]

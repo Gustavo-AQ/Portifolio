@@ -1,0 +1,24 @@
+title:
+  pt: Busca CEP
+  en: ZIP Code Lookup (CEP)
+summary:
+  pt: Consulta logradouro, bairro, cidade e estado a partir de um CEP usando uma API REST.
+  en: Looks up street, neighborhood, city and state from a Brazilian ZIP code (CEP) using a REST API.
+problem:
+  pt: Encontrar o endereço completo a partir do CEP é uma tarefa comum em cadastros. O programa automatiza a consulta com uma API pública.
+  en: Finding the full address from a ZIP code is a common task in forms and records. The program automates the lookup with a public API.
+features:
+  pt:
+    - Consulta de CEP por API REST.
+    - Retorno de logradouro, bairro, cidade e estado.
+  en:
+    - ZIP code lookup through a REST API.
+    - Returns street, neighborhood, city and state.
+category: tool
+status: completed
+order: 23
+icon: bx-map
+hue: 75
+stack: [Python, API REST]
+links:
+  repo: https://github.com/Gustavo-AQ/Buscar-CEP

@@ -1,0 +1,239 @@
+---
+import { Image } from 'astro:assets';
+import Base from '../layouts/Base.astro';
+import Icon from './Icon.astro';
+import ProjectCover from './ProjectCover.astro';
+import type { Lang } from '../i18n/ui';
+import { useTranslations, homeUrl, projectUrl, allLangs, type Alternates } from '../i18n/utils';
+import { getProjects, type Project } from '../lib/projects';
+import { site } from '../data/profile';
+
+interface Props {
+  lang: Lang;
+  project: Project;
+}
+const { lang, project } = Astro.props;
+const t = useTranslations(lang);
+const d = project.data;
+const alternates: Alternates = Object.fromEntries(allLangs.map((l) => [l, projectUrl(l, project.id)]));
+
+const all = await getProjects();
+const i = all.findIndex((p) => p.id === project.id);
+const prev = all[(i - 1 + all.length) % all.length];
+const next = all[(i + 1) % all.length];
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': d.links.repo ? 'SoftwareSourceCode' : 'CreativeWork',
+  name: d.title[lang],
+  description: d.summary[lang],
+  url: new URL(projectUrl(lang, project.id), site.url).href,
+  inLanguage: lang === 'pt' ? 'pt-BR' : 'en',
+  author: { '@type': 'Person', name: site.name, url: site.url },
+  keywords: d.stack.join(', '),
+  ...(d.links.repo ? { codeRepository: d.links.repo } : {}),
+};
+---
+
+<Base lang={lang} title={d.title[lang]} description={d.summary[lang]} alternates={alternates} jsonLd={jsonLd}>
+  <article class="project">
+    <header class="page-hero">
+      <div class="container">
+        <a class="back-link" href={`${homeUrl(lang)}#projects`}><Icon name="bx-left-arrow-alt" size={18} />{t('project.back')}</a>
+        <div class="p-head">
+          <div class="p-intro">
+            <div class="p-badges">
+              <span class:list={['badge', `badge-${d.status}`]}>{t(`projects.status.${d.status}`)}</span>
+              {d.private && <span class="badge badge-private"><Icon name="bx-lock-alt" size={12} />{t('projects.private')}</span>}
+              <span class="badge badge-private no-dot">{t(`projects.category.${d.category}`)}</span>
+              {d.featured && <span class="badge badge-private no-dot"><Icon name="bxs-star" size={12} class="star" />{t('projects.featured')}</span>}
+            </div>
+            <h1 class="p-title">{d.title[lang]}</h1>
+            <p class="p-summary">{d.summary[lang]}</p>
+            {
+              (d.links.repo || d.links.demo || d.links.store) && (
+                <div class="p-links">
+                  {d.links.demo && (
+                    <a class="btn btn-primary" href={d.links.demo} target="_blank" rel="noopener">
+                      <Icon name="bx-link-external" size={18} />
+                      {t('project.demo')}
+                    </a>
+                  )}
+                  {d.links.store && (
+                    <a class:list={['btn', d.links.demo ? 'btn-ghost' : 'btn-primary']} href={d.links.store} target="_blank" rel="noopener">
+                      <Icon name="bxl-chrome" size={18} />
+                      {t('project.store')}
+                    </a>
+                  )}
+                  {d.links.repo && (
+                    <a class="btn btn-ghost" href={d.links.repo} target="_blank" rel="noopener">
+                      <Icon name="bxl-github" size={18} />
+                      {t('project.repo')}
+                    </a>
+                  )}
+                </div>
+              )
+            }
+          </div>
+          <div class="p-cover"><ProjectCover project={project} lang={lang} eager /></div>
+        </div>
+      </div>
+    </header>
+
+    <div class="container p-layout">
+      <div class="p-main">
+        {d.private && (
+          <aside class="private-note">
+            <Icon name="bx-lock-alt" size={22} />
+            <p>{t('projects.private.note')}</p>
+          </aside>
+        )}
+
+        <section class="p-section">
+          <h2>{t('project.problem')}</h2>
+          <p class="prose">{d.problem[lang]}</p>
+        </section>
+
+        {
+          d.metrics && (
+            <ul class="metrics">
+              {d.metrics.map((m) => (
+                <li class="card">
+                  <strong>{m.value}</strong>
+                  <span>{m.label[lang]}</span>
+                </li>
+              ))}
+            </ul>
+          )
+        }
+
+        <section class="p-section">
+          <h2>{t('project.features')}</h2>
+          <ul class="checklist">{d.features[lang].map((f) => <li><Icon name="bx-check" size={18} />{f}</li>)}</ul>
+        </section>
+
+        {
+          d.sections?.map((s) => (
+            <section class="p-section">
+              <h2>{s.title[lang]}</h2>
+              <ul class="bullets">
+                {s.items[lang].map((it) => (
+                  <li>{it}</li>
+                ))}
+              </ul>
+            </section>
+          ))
+        }
+
+        {
+          d.results && (
+            <section class="p-section">
+              <h2>{t('project.results')}</h2>
+              <ul class="bullets">
+                {d.results[lang].map((r) => (
+                  <li>{r}</li>
+                ))}
+              </ul>
+            </section>
+          )
+        }
+
+        {
+          d.screenshots && (
+            <section class="p-section">
+              <h2>{t('project.screenshots')}</h2>
+              <ul class="shots">
+                {d.screenshots.map((s) => (
+                  <li>
+                    <a href={s.src.src} target="_blank" rel="noopener">
+                      <Image src={s.src} alt={s.alt[lang]} widths={[320, 640]} sizes="(min-width: 900px) 320px, 80vw" class="shot" />
+                    </a>
+                    <span>{s.alt[lang]}</span>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          )
+        }
+
+        {
+          d.notes && (
+            <aside class="note">
+              <Icon name="bx-info-circle" size={20} />
+              <p>{d.notes[lang]}</p>
+            </aside>
+          )
+        }
+      </div>
+
+      <aside class="p-side">
+        <div class="card side-card">
+          <h2>{t('project.stack')}</h2>
+          <ul class="chip-list">{d.stack.map((s) => <li class="chip">{s}</li>)}</ul>
+        </div>
+      </aside>
+    </div>
+
+    <nav class="container p-nav" aria-label={t('projects.title')}>
+      <a class="card p-nav-link" href={projectUrl(lang, prev.id)} rel="prev">
+        <small><Icon name="bx-left-arrow-alt" size={16} />{t('project.prevProject')}</small>
+        <span>{prev.data.title[lang]}</span>
+      </a>
+      <a class="card p-nav-link next" href={projectUrl(lang, next.id)} rel="next">
+        <small>{t('project.nextProject')}<Icon name="bx-right-arrow-alt" size={16} /></small>
+        <span>{next.data.title[lang]}</span>
+      </a>
+    </nav>
+  </article>
+</Base>
+
+<style>
+  .p-head { display: grid; gap: 28px; align-items: center; }
+  .p-badges { display: flex; flex-wrap: wrap; gap: 6px; }
+  .p-badges :global(.star) { color: var(--gold); }
+  .p-title { font-size: clamp(2rem, 1.4rem + 3vw, 3.2rem); margin-top: 14px; letter-spacing: -0.02em; }
+  .p-summary { color: var(--text-muted); font-size: 1.08rem; margin-top: 12px; max-width: 60ch; }
+  .p-links { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 22px; }
+  .p-cover { border-radius: var(--radius-lg); overflow: hidden; border: 1px solid var(--border); box-shadow: var(--shadow); }
+
+  .p-layout { display: grid; gap: 28px; padding-top: 40px; padding-bottom: 56px; }
+  .p-main { display: grid; gap: 36px; min-width: 0; }
+  .p-section h2, .side-card h2 { font-size: 1.3rem; margin-bottom: 14px; }
+  .private-note, .note { display: flex; gap: 12px; align-items: flex-start; padding: 16px 18px; border-radius: var(--radius); font-size: 0.95rem; }
+  .private-note { background: var(--surface); border: 1px dashed var(--border-strong); color: var(--text-muted); }
+  .private-note :global(.icon) { color: var(--gold); margin-top: 2px; }
+  .note { background: var(--surface-2); color: var(--text-muted); }
+  .note :global(.icon) { color: var(--text-faint); margin-top: 2px; }
+
+  .metrics { list-style: none; display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; }
+  .metrics li { padding: 18px; display: flex; flex-direction: column; gap: 6px; }
+  .metrics strong { font-family: var(--font-display); font-size: 1.8rem; color: var(--accent-text); line-height: 1.1; }
+  .metrics span { color: var(--text-muted); font-size: 0.88rem; line-height: 1.4; }
+
+  .checklist { list-style: none; display: grid; gap: 10px; }
+  .checklist li { display: flex; gap: 10px; color: var(--text-muted); }
+  .checklist li :global(.icon) { color: var(--accent-text); margin-top: 4px; }
+  .bullets { list-style: none; display: grid; gap: 10px; }
+  .bullets li { position: relative; padding-left: 20px; color: var(--text-muted); overflow-wrap: anywhere; }
+  .bullets li::before { content: ''; position: absolute; left: 2px; top: 0.62em; width: 8px; height: 8px; border-radius: 2px; background: var(--accent); transform: rotate(45deg); }
+
+  .shots { list-style: none; display: grid; grid-auto-flow: column; grid-auto-columns: 78%; gap: 12px; overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: 8px; }
+  .shots li { scroll-snap-align: start; display: grid; gap: 8px; }
+  .shots span { font-size: 0.85rem; color: var(--text-faint); }
+  .shot { width: 100%; height: 240px; object-fit: contain; background: var(--surface-2); border: 1px solid var(--border); border-radius: 12px; padding: 8px; }
+
+  .side-card { padding: 20px; }
+  .p-nav { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; padding-bottom: 64px; }
+  .p-nav-link { padding: 16px; display: flex; flex-direction: column; gap: 4px; color: var(--text); min-width: 0; }
+  .p-nav-link:hover { border-color: var(--accent-ring); text-decoration: none; }
+  .p-nav-link small { display: inline-flex; align-items: center; gap: 4px; color: var(--text-faint); font-size: 0.78rem; }
+  .p-nav-link span { font-weight: 600; font-family: var(--font-display); overflow-wrap: anywhere; }
+  .p-nav-link.next { text-align: right; align-items: flex-end; }
+
+  @media (min-width: 900px) {
+    .p-head { grid-template-columns: 1.2fr 1fr; gap: 48px; }
+    .p-layout { grid-template-columns: minmax(0, 1fr) 300px; gap: 48px; padding-top: 56px; }
+    .p-side { position: sticky; top: calc(var(--header-h) + 20px); align-self: start; }
+    .shots { grid-auto-flow: row; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); grid-auto-columns: auto; overflow: visible; }
+  }
+</style>

@@ -1,0 +1,53 @@
+title:
+  pt: Lovia
+  en: Lovia
+summary:
+  pt: Páginas de amor personalizadas com fotos, música, carta, contador de tempo juntos e surpresas, compartilhadas por link ou QR Code.
+  en: Personalized love pages with photos, music, a letter, a time-together counter and surprises, shared by link or QR Code.
+problem:
+  pt: Presentes tradicionais nem sempre traduzem a história de um casal. O Lovia transforma fotografias, músicas, mensagens e memórias em uma experiência online personalizada e fácil de compartilhar.
+  en: Traditional gifts don't always capture a couple's story. Lovia turns photos, songs, messages and memories into a personalized online experience that is easy to share.
+features:
+  pt:
+    - Criação de páginas personalizadas para casais.
+    - Galeria de fotos e apresentação de slides.
+    - Músicas integradas pelo Spotify.
+    - Contador de tempo de relacionamento.
+    - Cartas e mensagens personalizadas.
+    - Linha do tempo com os momentos importantes.
+    - Mapa de lugares especiais.
+    - Quiz do casal e surpresas interativas.
+    - Proteção de páginas ou mensagens por senha.
+    - Compartilhamento por link e QR Code.
+    - Planos comerciais com diferentes períodos de publicação.
+  en:
+    - Personalized pages for couples.
+    - Photo gallery and slideshow.
+    - Songs embedded from Spotify.
+    - Relationship time counter.
+    - Personalized letters and messages.
+    - Timeline of important moments.
+    - Map of special places.
+    - Couple quiz and interactive surprises.
+    - Password protection for pages or messages.
+    - Sharing by link and QR Code.
+    - Paid plans with different publishing periods.
+results:
+  pt:
+    - Produto público no ar em lovia.gaqtech.dev.
+    - Galeria com até 10 fotos por página.
+    - Planos de 1, 6 e 12 meses.
+  en:
+    - Public product live at lovia.gaqtech.dev.
+    - Gallery with up to 10 photos per page.
+    - 1, 6 and 12 month plans.
+category: app
+status: production
+featured: true
+private: true
+order: 2
+icon: bx-heart
+hue: 345
+stack: [SvelteKit]
+links:
+  demo: https://lovia.gaqtech.dev/

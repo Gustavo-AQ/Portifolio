@@ -1,0 +1,47 @@
+title:
+  pt: QEstacionamento
+  en: QEstacionamento
+summary:
+  pt: Plataforma multiempresa que digitaliza a operação de estacionamentos, com entrada e saída de veículos, cobrança automática e leitura de placas por câmera.
+  en: Multi-tenant platform that digitizes parking lot operations, with vehicle check-in/out, automatic billing and camera-based plate recognition.
+problem:
+  pt: Muitos estacionamentos ainda controlam veículos, cobranças e mensalidades à mão ou em planilhas. O QEstacionamento substitui esses controles por uma plataforma centralizada, com suporte a várias empresas na mesma aplicação.
+  en: Many parking lots still track vehicles, payments and monthly plans by hand or in spreadsheets. QEstacionamento replaces those controls with a centralized platform that supports multiple companies in a single application.
+features:
+  pt:
+    - Gerenciamento multiempresa com identificação por CNPJ.
+    - Registro de entrada e saída de veículos.
+    - Cálculo automático de tarifas, frações, diárias e pernoites.
+    - Gestão de clientes mensalistas e veículos rotativos.
+    - Reconhecimento de placas por câmera com OCR.
+    - Integração com serviços externos de consulta de placas.
+    - Emissão de tickets, recibos e relatórios em PDF.
+    - Administração de usuários, permissões e estabelecimentos.
+    - Integrações com n8n para mensalidades e criação de ambientes de demonstração.
+    - Empacotamento em contêineres Docker para implantação no Coolify.
+  en:
+    - Multi-tenant management with companies identified by CNPJ (Brazilian tax ID).
+    - Vehicle check-in and check-out.
+    - Automatic calculation of rates, fractions, daily and overnight fees.
+    - Management of monthly subscribers and hourly vehicles.
+    - Camera-based license plate recognition with OCR.
+    - Integration with external plate lookup services.
+    - Tickets, receipts and PDF reports.
+    - Administration of users, permissions and locations.
+    - n8n integrations for monthly billing and provisioning demo environments.
+    - Packaged as Docker containers for deployment on Coolify.
+results:
+  pt:
+    - Vários estacionamentos atendidos por uma única aplicação.
+    - Em produção, com implantação em contêineres.
+  en:
+    - Multiple parking lots served by a single application.
+    - In production, deployed in containers.
+category: app
+status: production
+featured: true
+private: true
+order: 1
+icon: bx-car
+hue: 205
+stack: [Python 3.13, Dash, Dash Bootstrap Components, Flask, MySQL 8, SQLAlchemy, PyMySQL, OpenCV, RapidOCR, ONNX Runtime, uv, Docker, Coolify, n8n]

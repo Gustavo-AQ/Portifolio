@@ -1,0 +1,26 @@
+title:
+  pt: Monitor de Preços (Preço Online)
+  en: Price Monitor (Preço Online)
+summary:
+  pt: Monitora e registra preços de produtos em e-commerces com web scraping, para identificar variações e boas oportunidades de compra.
+  en: Monitors and records product prices on e-commerce sites with web scraping, to spot price changes and good buying opportunities.
+problem:
+  pt: Acompanhar o preço de um produto em várias lojas manualmente é cansativo. O monitor coleta os preços periodicamente e guarda o histórico para análise.
+  en: Tracking a product's price across stores by hand is tiring. The monitor collects prices periodically and keeps the history for analysis.
+features:
+  pt:
+    - Coleta periódica de preços via web scraping.
+    - Histórico armazenado para análise posterior.
+    - Identificação de variações e tendências.
+  en:
+    - Periodic price collection via web scraping.
+    - History stored for later analysis.
+    - Detection of changes and trends.
+category: tool
+status: completed
+order: 21
+icon: bx-purchase-tag
+hue: 55
+stack: [Python, Web Scraping]
+links:
+  repo: https://github.com/Gustavo-AQ/Preco-Online

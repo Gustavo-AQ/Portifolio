@@ -1,0 +1,43 @@
+title:
+  pt: Automação de Lotes de Integração
+  en: Integration Batch Automation
+summary:
+  pt: Aplicação desktop que transforma uma planilha de entrada em cinco arquivos padronizados de integração, reconhecendo cabeçalhos e colunas automaticamente.
+  en: Desktop app that turns one input spreadsheet into five standardized integration files, detecting headers and columns automatically.
+problem:
+  pt: Preparar planilhas para integração com outros sistemas gerava retrabalho por causa de cabeçalhos inconsistentes, preenchimento manual e estruturas diferentes. A automação padroniza tudo em poucos cliques.
+  en: Preparing spreadsheets for integration with other systems caused rework because of inconsistent headers, manual filling and different structures. The automation standardizes everything in a few clicks.
+features:
+  pt:
+    - Importação de planilhas Excel.
+    - Identificação automática da linha de cabeçalho.
+    - Normalização dos nomes de colunas, com correspondência aproximada.
+    - Reconhecimento de variações de acentuação e maiúsculas.
+    - Mapeamento e reorganização dos dados.
+    - Preenchimento de informações complementares, como solicitante, data e evento.
+    - Geração automática dos arquivos padronizados.
+    - Interface gráfica para escolher e processar os documentos.
+    - Execução como programa Windows.
+  en:
+    - Excel spreadsheet import.
+    - Automatic header row detection.
+    - Column name normalization with fuzzy matching.
+    - Handles accent and capitalization variations.
+    - Data mapping and reorganization.
+    - Fills in extra information such as requester, date and event.
+    - Automatic generation of standardized files.
+    - Graphical interface to pick and process documents.
+    - Runs as a Windows program.
+results:
+  pt:
+    - 5 planilhas padronizadas geradas a partir de um único arquivo, nos formatos CALCP, HC30%, HCP, CALCS e HSP.
+  en:
+    - 5 standardized spreadsheets generated from a single file, in the CALCP, HC30%, HCP, CALCS and HSP formats.
+category: tool
+status: completed
+order: 14
+icon: bx-table
+hue: 100
+stack: [Python 3.12+, pandas, NumPy, OpenPyXL, Tkinter, uv, PyInstaller]
+links:
+  repo: https://github.com/Gustavo-AQ/Automacao_lotes

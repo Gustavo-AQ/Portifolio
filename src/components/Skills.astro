@@ -1,0 +1,103 @@
+---
+import type { Lang } from '../i18n/ui';
+import { useTranslations } from '../i18n/utils';
+import { skillGroups, methods, spokenLanguages, type Tier } from '../data/profile';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const tiers: Tier[] = ['adv', 'int', 'bas'];
+const iconSrc = (icon: string) => (icon.startsWith('/') ? icon : `/img/skills/${icon}.svg`);
+---
+
+<section class="section section-alt" id="skills" aria-labelledby="skills-title">
+  <div class="container">
+    <div class="section-head" data-reveal>
+      <span class="kicker">{t('skills.kicker')}</span>
+      <h2 class="section-title" id="skills-title">{t('skills.title')}</h2>
+    </div>
+
+    <div class="legend" aria-hidden="true">
+      {tiers.map((tier) => <span class:list={['legend-item', tier]}><i />{t(`skills.${tier}`)}</span>)}
+    </div>
+
+    <div class="skill-groups">
+      {
+        skillGroups.map((g) => (
+          <article class="card skill-card" data-reveal>
+            <h3>{g.title[lang]}</h3>
+            {tiers.map(
+              (tier) =>
+                g.tiers[tier] && (
+                  <div class:list={['tier', tier]}>
+                    <span class="tier-label">{t(`skills.${tier}`)}</span>
+                    <ul class="skill-list">
+                      {g.tiers[tier]!.map((s) => (
+                        <li class="skill">
+                          <span class="skill-logo">
+                            <img src={iconSrc(s.icon)} alt="" width="22" height="22" loading="lazy" decoding="async" />
+                          </span>
+                          {s.name}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                ),
+            )}
+          </article>
+        ))
+      }
+
+      <article class="card skill-card" data-reveal>
+        <h3>{t('skills.methods')}</h3>
+        <ul class="chip-list tags">{methods.map((m) => <li class="chip">{m}</li>)}</ul>
+        <h3 class="mt">{t('skills.languages')}</h3>
+        <ul class="langs">
+          {
+            spokenLanguages.map((l) => (
+              <li>
+                <span>{l.name[lang]}</span>
+                <span class="lang-level">{l.level[lang]}</span>
+              </li>
+            ))
+          }
+        </ul>
+      </article>
+    </div>
+  </div>
+</section>
+
+<style>
+  .legend { display: flex; flex-wrap: wrap; gap: 16px; margin: -12px 0 20px; font-size: 0.82rem; color: var(--text-muted); }
+  .legend-item { display: inline-flex; align-items: center; gap: 6px; }
+  .legend-item i { width: 10px; height: 10px; border-radius: 3px; background: var(--c); }
+  .adv { --c: var(--tier-adv); }
+  .int { --c: var(--tier-int); }
+  .bas { --c: var(--tier-bas); }
+
+  .skill-groups { display: grid; gap: 14px; }
+  .skill-card { padding: 20px; }
+  .skill-card h3 { font-size: 1.05rem; margin-bottom: 14px; }
+  .skill-card h3.mt { margin-top: 24px; }
+  .tier { padding: 12px 0 12px 14px; border-left: 3px solid var(--c); }
+  .tier + .tier { margin-top: 6px; }
+  .tier-label { display: block; font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--c); margin-bottom: 8px; }
+  .skill-list { list-style: none; display: flex; flex-wrap: wrap; gap: 8px; }
+  .skill {
+    display: inline-flex; align-items: center; gap: 8px; padding: 5px 12px 5px 5px; border-radius: 999px;
+    background: var(--surface-2); border: 1px solid var(--border); font-size: 0.88rem; font-weight: 500;
+  }
+  .skill-logo { display: grid; place-items: center; width: 30px; height: 30px; border-radius: 50%; background: var(--logo-plate); flex: none; }
+  .skill-logo img { width: 18px; height: 18px; object-fit: contain; }
+  .tags .chip { font-size: 0.88rem; padding: 6px 12px; color: var(--accent-text); background: var(--accent-soft); border-color: rgba(18, 214, 64, 0.25); }
+  .langs { list-style: none; display: grid; gap: 8px; }
+  .langs li { display: flex; justify-content: space-between; padding: 10px 14px; border-radius: 10px; background: var(--surface-2); border: 1px solid var(--border); font-weight: 500; }
+  .lang-level { color: var(--text-muted); font-size: 0.88rem; }
+
+  @media (min-width: 900px) {
+    .skill-groups { grid-template-columns: 1fr 1fr; gap: 18px; }
+    .skill-card { padding: 26px; }
+  }
+</style>

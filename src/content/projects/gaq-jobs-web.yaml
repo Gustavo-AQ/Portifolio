@@ -1,0 +1,44 @@
+title:
+  pt: GAQ Jobs Web
+  en: GAQ Jobs Web
+summary:
+  pt: Painel web para gerenciar vagas de emprego encontradas por agentes de IA e acompanhar cada candidatura, integrado ao Grok Bot via n8n e MCP.
+  en: Web dashboard to manage job openings found by AI agents and track each application, integrated with Grok Bot via n8n and MCP.
+problem:
+  pt: As vagas identificadas por agentes de IA ficavam espalhadas em ferramentas diferentes, o que dificultava acompanhar as candidaturas. O GAQ Jobs centraliza tudo em um painel organizado, do primeiro contato ao resultado.
+  en: Job openings found by AI agents were scattered across different tools, making it hard to keep track of applications. GAQ Jobs centralizes everything in one organized dashboard, from first contact to final result.
+features:
+  pt:
+    - Painel para consultar e gerenciar vagas coletadas por IA.
+    - Integração com o Grok Bot por meio do n8n e MCP.
+    - Filtros por modalidade de trabalho, contrato, aderência e período.
+    - Busca, ordenação e paginação de oportunidades.
+    - Acompanhamento de candidaturas, entrevistas, testes e resultados.
+    - Histórico auditável de mudanças de status.
+    - Login próprio, sessões protegidas e níveis de permissão.
+    - Interface responsiva para computador e celular.
+  en:
+    - Dashboard to browse and manage job openings collected by AI.
+    - Integration with Grok Bot through n8n and MCP.
+    - Filters by work model, contract type, fit score and period.
+    - Search, sorting and pagination.
+    - Tracking of applications, interviews, tests and results.
+    - Auditable history of status changes.
+    - Own login, protected sessions and permission levels.
+    - Responsive interface for desktop and mobile.
+results:
+  pt:
+    - Workflow MCP documentado com 4 ferramentas.
+    - Em produção em jobs.gaqtech.dev.
+  en:
+    - MCP workflow documented with 4 tools.
+    - In production at jobs.gaqtech.dev.
+category: app
+status: production
+order: 10
+icon: bx-briefcase
+hue: 220
+stack: [React, TypeScript, Vite, Python, FastAPI, PostgreSQL 18, Docker Compose, Coolify, n8n, MCP, Argon2id]
+links:
+  repo: https://github.com/Gustavo-AQ/GAQ-Jobs-Web
+  demo: https://jobs.gaqtech.dev/

@@ -1,0 +1,63 @@
+title:
+  pt: Backup OS
+  en: Backup OS
+summary:
+  pt: Sistema de backup e recuperação para Windows que une backup incremental de arquivos, imagem completa do sistema e mídia de recuperação inicializável.
+  en: Backup and recovery system for Windows that combines incremental file backups, full system images and bootable recovery media.
+problem:
+  pt: Uma falha de sistema pode significar perda de dados e horas para reconfigurar um computador. O Backup OS reduz esse risco reunindo backup incremental de arquivos e imagens completas do Windows em uma única ferramenta, com restauração simples.
+  en: A system failure can mean data loss and hours spent rebuilding a computer. Backup OS reduces that risk by combining incremental file backups and full Windows images in a single tool, with straightforward restore.
+features:
+  pt:
+    - Backup incremental de arquivos e diretórios.
+    - Modo versionado, que preserva versões anteriores dos arquivos.
+    - Modo espelho para sincronização exata de diretórios.
+    - Imagens completas do Windows com VSS e WIM.
+    - Agendamento automático de tarefas de backup.
+    - Histórico de execuções em SQLite.
+    - Verificação de integridade com SHA-256.
+    - Restauração de arquivos e de versões anteriores.
+    - Mídia de recuperação inicializável com WinPE.
+    - Restauração completa do sistema a partir da imagem.
+    - Interface de linha de comando e interface gráfica.
+    - Distribuição como executável Windows.
+  en:
+    - Incremental backup of files and folders.
+    - Versioned mode that keeps previous file versions.
+    - Mirror mode for exact folder synchronization.
+    - Full Windows images using VSS and WIM.
+    - Automatic scheduling of backup jobs.
+    - Run history stored in SQLite.
+    - Integrity checks with SHA-256.
+    - Restore of files and previous versions.
+    - Bootable recovery media with WinPE.
+    - Full system restore from an image.
+    - Command line and graphical interfaces.
+    - Distributed as a Windows executable.
+metrics:
+  - value: 8,2 GB
+    label:
+      pt: imagem de sistema capturada em 1h01 (VM Hyper-V de teste)
+      en: system image captured in 1h01 (Hyper-V test VM)
+  - value: SHA-256
+    label:
+      pt: verificação de integridade aprovada
+      en: integrity check passed
+results:
+  pt:
+    - Backup de arquivos, versionamento, agendamento e captura de sistema concluídos.
+    - Testes de restauração realizados em ambiente virtualizado.
+  en:
+    - File backup, versioning, scheduling and system capture completed.
+    - Restore tests performed in a virtualized environment.
+notes:
+  pt: Os tempos informados vêm de um ambiente de teste específico e não representam um benchmark geral.
+  en: Reported times come from a specific test environment and are not a general benchmark.
+category: tool
+status: development
+featured: true
+private: true
+order: 3
+icon: bx-hdd
+hue: 260
+stack: [C#, .NET 10, Windows VSS, DISM, WIM, WinPE, Robocopy, SQLite, System.CommandLine, Spectre.Console, xUnit, PowerShell]

@@ -1,0 +1,30 @@
+title:
+  pt: Gerador de QR Code
+  en: QR Code Generator
+summary:
+  pt: Gera QR Codes personalizados para textos e URLs, com opção de logotipo centralizado para reforçar a identidade visual.
+  en: Generates custom QR Codes for text and URLs, with an optional centered logo to reinforce brand identity.
+problem:
+  pt: Criar QR Codes com a identidade visual de uma marca costuma depender de sites com limitações ou anúncios. O gerador resolve isso localmente, com logotipo no centro.
+  en: Creating QR Codes with a brand's look usually depends on websites with limits or ads. The generator does it locally, with a logo in the center.
+features:
+  pt:
+    - QR Codes a partir de textos e URLs.
+    - Conteúdo codificado personalizável.
+    - Logotipo central opcional.
+    - Exportação como imagem.
+    - Distribuição como executável.
+  en:
+    - QR Codes from text and URLs.
+    - Customizable encoded content.
+    - Optional centered logo.
+    - Image export.
+    - Distributable as an executable.
+category: tool
+status: completed
+order: 16
+icon: bx-qr
+hue: 300
+stack: [Python, qrcode, Pillow, PyInstaller]
+links:
+  repo: https://github.com/Gustavo-AQ/qrcode_generator

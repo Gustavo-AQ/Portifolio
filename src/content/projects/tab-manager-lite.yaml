@@ -1,0 +1,51 @@
+title:
+  pt: Tab Manager Lite
+  en: Tab Manager Lite
+summary:
+  pt: Extensão para Chrome que organiza muitas abas abertas, encontra duplicadas, salva sessões e gerencia várias janelas. Publicada na Chrome Web Store.
+  en: Chrome extension that organizes lots of open tabs, finds duplicates, saves sessions and manages multiple windows. Published on the Chrome Web Store.
+problem:
+  pt: Com dezenas de abas abertas fica difícil achar o que importa, perceber páginas repetidas e recuperar o trabalho depois. O Tab Manager Lite resolve isso sem depender de frameworks ou bibliotecas externas.
+  en: With dozens of open tabs it's hard to find what matters, notice duplicates and get your work back later. Tab Manager Lite solves this without relying on frameworks or external libraries.
+features:
+  pt:
+    - Listagem de abas organizadas por janela.
+    - Busca por título ou URL.
+    - Detecção de abas duplicadas por domínio ou URL exata, com fechamento por atalho.
+    - Seleção múltipla e ações em lote.
+    - Salvamento, restauração, exportação e importação de sessões em JSON.
+    - Suspensão de abas para liberar memória.
+    - Fixar e silenciar abas.
+    - Mesclagem de várias janelas.
+    - Personalização de tema, tamanho do popup e modo de visualização.
+    - Preferências e sessões salvas localmente.
+    - Testes automatizados das principais operações.
+  en:
+    - Tabs listed and grouped by window.
+    - Search by title or URL.
+    - Duplicate detection by domain or exact URL, closed with a shortcut.
+    - Multi-select and bulk actions.
+    - Save, restore, export and import sessions as JSON.
+    - Suspend tabs to free memory.
+    - Pin and mute tabs.
+    - Merge multiple windows.
+    - Customizable theme, popup size and view mode.
+    - Preferences and sessions stored locally.
+    - Automated tests for the main operations.
+results:
+  pt:
+    - Versão 1.0.0 publicada na Chrome Web Store.
+    - Zero dependências de frameworks de interface.
+  en:
+    - Version 1.0.0 published on the Chrome Web Store.
+    - Zero UI framework dependencies.
+category: tool
+status: production
+featured: true
+order: 6
+icon: bx-windows
+hue: 190
+stack: [JavaScript, HTML5, CSS3, Chrome Extension API, Manifest V3, Chrome Storage API, Node.js]
+links:
+  repo: https://github.com/Gustavo-AQ/tab_manager_lite
+  store: https://chromewebstore.google.com/detail/tab-manager-lite/cbfkhjmkbahkhfdmjpadfiohiineagbc
