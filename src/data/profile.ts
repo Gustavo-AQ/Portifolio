@@ -17,7 +17,7 @@ export const site = {
    * Ela foi feita para ficar no HTML; não é um segredo.
    * Enquanto estiver vazia, o formulário mostra o e-mail como alternativa.
    */
-  web3formsKey: '',
+  web3formsKey: '7a54e073-6624-4ae4-9773-8586898584b4',
   location: { pt: 'Zona Norte, São Paulo, SP, Brasil', en: 'São Paulo, Brazil' } as L,
 };
 
