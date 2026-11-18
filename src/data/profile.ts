@@ -72,8 +72,9 @@ export interface Experience {
 export const experience: Experience[] = [
   {
     company: 'Rede Américas',
+    url: 'https://www.saudeamericas.com.br/',
     location: 'São Paulo, SP',
-    period: { pt: '2026 – atual', en: '2026 – present' },
+    period: { pt: 'Out 2026 – atual', en: 'Oct 2026 – present' },
     role: {
       pt: 'Atendimento Receptivo (contrato temporário via Luandre)',
       en: 'Patient Reception (temporary contract via Luandre)',
@@ -189,7 +190,46 @@ export const education: Education[] = [
   },
 ];
 
-export const certifications: { name: L; issuer: string; url: string; tone: 'azure' | 'db' | 'ml' }[] = [
+export type CertTone = 'azure' | 'db' | 'ml' | 'ai';
+export interface Certification {
+  name: L;
+  issuer: 'DIO' | 'Anthropic';
+  /** Mês/ano de conclusão (opcional) */
+  date?: L;
+  /** Carga horária (opcional) */
+  hours?: number;
+  /** Link do certificado (opcional) */
+  url?: string;
+  tone: CertTone;
+}
+
+/** Mais recentes primeiro */
+export const certifications: Certification[] = [
+  {
+    name: { pt: 'Formação Docker Fundamentals', en: 'Docker Fundamentals Track' },
+    issuer: 'DIO',
+    date: { pt: 'Ago 2026', en: 'Aug 2026' },
+    hours: 15,
+    tone: 'azure',
+  },
+  {
+    name: { pt: 'Claude 101 (Certificate of Completion)', en: 'Claude 101 (Certificate of Completion)' },
+    issuer: 'Anthropic',
+    date: { pt: 'Jun 2026', en: 'Jun 2026' },
+    tone: 'ai',
+  },
+  {
+    name: { pt: 'Vivo: Python AI Backend Developer', en: 'Vivo: Python AI Backend Developer' },
+    issuer: 'DIO',
+    date: { pt: 'Jun 2025', en: 'Jun 2025' },
+    tone: 'ml',
+  },
+  {
+    name: { pt: 'Desenvolvimento de APIs com FastAPI, Docker e TDD', en: 'API Development with FastAPI, Docker and TDD' },
+    issuer: 'DIO',
+    date: { pt: 'Jun 2024', en: 'Jun 2024' },
+    tone: 'db',
+  },
   { name: { pt: 'Azure AI', en: 'Azure AI' }, issuer: 'DIO', url: 'https://www.dio.me/certificate/0WKHA92I/share', tone: 'azure' },
   { name: { pt: 'Banco de Dados', en: 'Databases' }, issuer: 'DIO', url: 'https://www.dio.me/certificate/WE7ZH8DS/share', tone: 'db' },
   {
@@ -202,12 +242,33 @@ export const certifications: { name: L; issuer: string; url: string; tone: 'azur
 
 export type Tier = 'adv' | 'int' | 'bas';
 export interface Skill {
-  name: string;
-  /** Arquivo em /public/img/skills ou caminho absoluto */
-  icon: string;
+  /** Texto único ou { pt, en } quando o nome muda entre idiomas */
+  name: string | L;
+  /** Arquivo em /public/img/skills (sem .svg) ou caminho absoluto. Sem ícone, mostra um ícone genérico. */
+  icon?: string;
 }
 
 export const skillGroups: { title: L; tiers: Partial<Record<Tier, Skill[]>> }[] = [
+  {
+    title: { pt: 'IA Generativa & Agentes', en: 'Generative AI & Agents' },
+    tiers: {
+      adv: [
+        { name: 'OpenAI API', icon: '/img/logos/openai.svg' },
+        { name: 'Prompt Engineering' },
+        { name: { pt: 'JSON Schema (saídas estruturadas)', en: 'JSON Schema (structured outputs)' } },
+        { name: { pt: 'Assistentes e fluxos de IA', en: 'AI assistants and workflows' } },
+      ],
+      int: [{ name: 'LLMs' }, { name: 'LangChain' }],
+      bas: [{ name: 'MCP' }, { name: { pt: 'A2A (conceitual)', en: 'A2A (conceptual)' } }, { name: { pt: 'RAG (teórico)', en: 'RAG (theoretical)' } }],
+    },
+  },
+  {
+    title: { pt: 'APIs & Integrações', en: 'APIs & Integrations' },
+    tiers: {
+      adv: [{ name: 'FastAPI', icon: 'fastapi' }, { name: { pt: 'APIs REST', en: 'REST APIs' } }],
+      int: [{ name: 'Webhooks' }, { name: 'n8n', icon: 'n8n' }, { name: 'Evolution API' }],
+    },
+  },
   {
     title: { pt: 'Linguagens & Dados', en: 'Languages & Data' },
     tiers: {
@@ -232,14 +293,15 @@ export const skillGroups: { title: L; tiers: Partial<Record<Tier, Skill[]>> }[] 
     title: { pt: 'Tecnologias & Ferramentas', en: 'Technologies & Tools' },
     tiers: {
       adv: [
-        { name: 'Git', icon: 'git' },
-        { name: 'OpenAI', icon: '/img/logos/openai.svg' },
+        { name: 'Git / GitHub', icon: 'git' },
         { name: 'AWS', icon: 'amazonwebservices' },
-        { name: 'Linux', icon: 'linux' },
+        { name: 'Linux Server', icon: 'linux' },
       ],
       int: [
         { name: 'Docker', icon: 'docker' },
-        { name: 'n8n', icon: 'n8n' },
+        { name: 'Nginx', icon: 'nginx' },
+        { name: 'Systemd' },
+        { name: { pt: 'Redes e firewall', en: 'Networking and firewall' } },
         { name: 'Azure', icon: 'azure' },
         { name: 'Jupyter', icon: 'jupyter' },
       ],
@@ -249,8 +311,10 @@ export const skillGroups: { title: L; tiers: Partial<Record<Tier, Skill[]>> }[] 
   {
     title: { pt: 'Frameworks & Bibliotecas', en: 'Frameworks & Libraries' },
     tiers: {
-      adv: [{ name: 'FastAPI', icon: 'fastapi' }],
       int: [
+        { name: 'pandas', icon: 'pandas' },
+        { name: 'NumPy', icon: 'numpy' },
+        { name: 'OpenPyXL' },
         { name: 'React', icon: 'react' },
         { name: 'Next.js', icon: 'nextjs' },
         { name: 'Django', icon: 'django' },
@@ -267,7 +331,10 @@ export const methods = ['Scrum / Kanban', 'Notion', 'Trello', 'n8n', 'Make'];
 
 export const spokenLanguages: { name: L; level: L }[] = [
   { name: { pt: 'Português', en: 'Portuguese' }, level: { pt: 'Nativo', en: 'Native' } },
-  { name: { pt: 'Inglês', en: 'English' }, level: { pt: 'Intermediário', en: 'Intermediate' } },
+  { name: { pt: 'Inglês', en: 'English' }, level: { pt: 'Intermediário-avançado', en: 'Upper intermediate' } },
   { name: { pt: 'Espanhol', en: 'Spanish' }, level: { pt: 'Básico', en: 'Basic' } },
   { name: { pt: 'Francês', en: 'French' }, level: { pt: 'Básico', en: 'Basic' } },
 ];
+
+/** Resolve o nome de uma habilidade no idioma pedido. */
+export const skillName = (s: Skill, lang: Lang): string => (typeof s.name === 'string' ? s.name : s.name[lang]);

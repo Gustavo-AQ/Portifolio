@@ -1,6 +1,6 @@
 import type { Lang } from '../i18n/ui';
 import { useTranslations, projectUrl, homeUrl, markdownUrl } from '../i18n/utils';
-import { site, about, experience, education, certifications, skillGroups, methods, spokenLanguages } from '../data/profile';
+import { site, about, experience, education, certifications, skillGroups, methods, spokenLanguages, skillName } from '../data/profile';
 import { getProjects } from './projects';
 
 const abs = (path: string) => new URL(path, site.url).href;
@@ -79,7 +79,7 @@ export async function buildPortfolioMarkdown(lang: Lang): Promise<string> {
   for (const g of skillGroups) {
     const parts = (['adv', 'int', 'bas'] as const)
       .filter((tier) => g.tiers[tier])
-      .map((tier) => `${t(`skills.${tier}`)}: ${g.tiers[tier]!.map((s) => s.name).join(', ')}`);
+      .map((tier) => `${t(`skills.${tier}`)}: ${g.tiers[tier]!.map((s) => skillName(s, lang)).join(', ')}`);
     out.push(`- **${g.title[lang]}**: ${parts.join(' | ')}`);
   }
   out.push(`- **${t('skills.methods')}**: ${methods.join(', ')}`);
@@ -93,7 +93,9 @@ export async function buildPortfolioMarkdown(lang: Lang): Promise<string> {
   }
   out.push('');
   out.push(`### ${t('education.certs')}`);
-  certifications.forEach((c) => out.push(`- ${c.name[lang]} (${c.issuer}): ${c.url}`));
+  certifications.forEach((c) =>
+    out.push(`- ${c.name[lang]} (${[c.issuer, c.date?.[lang], c.hours ? `${c.hours}h` : null].filter(Boolean).join(', ')})${c.url ? `: ${c.url}` : ''}`),
+  );
   out.push('');
 
   out.push('---');
@@ -114,7 +116,7 @@ export async function buildLlmsTxt(): Promise<string> {
   return [
     `# ${site.name}`,
     '',
-    `> Computer Engineer and software developer from São Paulo, Brazil, focused on AI, automation, data and cloud. Portfolio available in Portuguese and English.`,
+    `> Python Developer and Computer Engineering student from São Paulo, Brazil, focused on generative AI, agents, integrations and automation. Portfolio available in Portuguese and English.`,
     '',
     'This site is a personal portfolio. The files below contain the full content in Markdown, generated from the same data as the website.',
     '',

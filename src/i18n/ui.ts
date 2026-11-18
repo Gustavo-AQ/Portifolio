@@ -8,9 +8,9 @@ export const defaultLang: Lang = 'pt';
 
 export const ui = {
   pt: {
-    'meta.title': 'Gustavo Quinup | Desenvolvedor & Entusiasta de IA',
+    'meta.title': 'Gustavo Quinup | Desenvolvedor Python, IA Generativa e Agentes',
     'meta.description':
-      'Portfólio de Gustavo Quinup, Engenheiro de Computação focado em Inteligência Artificial, automações, dados e computação em nuvem.',
+      'Portfólio de Gustavo Quinup, Desenvolvedor Python e estudante de Engenharia da Computação focado em IA generativa, agentes, integrações e automações.',
     'skip': 'Pular para o conteúdo',
     'nav.about': 'Sobre',
     'nav.projects': 'Projetos',
@@ -27,9 +27,9 @@ export const ui = {
     'hero.badge': 'Aberto a oportunidades',
     'hero.hello': 'Olá, eu sou',
     'hero.iam': 'Sou',
-    'hero.roles': ['Desenvolvedor', 'Engenheiro de Computação', 'Entusiasta de IA'],
+    'hero.roles': ['Desenvolvedor Python', 'Engenheiro de Computação', 'Dev de IA Generativa e Agentes'],
     'hero.tagline':
-      'Desenvolvo sistemas, automações e soluções com IA que resolvem problemas reais de operação, do backend em Python ao deploy em contêineres.',
+      'Desenvolvo assistentes e fluxos de IA generativa, agentes e integrações entre sistemas com Python, OpenAI API e FastAPI, do processamento de documentos ao deploy em produção.',
     'hero.cta.projects': 'Ver projetos',
     'hero.cta.contact': 'Fale comigo',
     'hero.stats.projects': 'projetos',
@@ -128,9 +128,9 @@ export const ui = {
     '404.home': 'Ir para o início',
   },
   en: {
-    'meta.title': 'Gustavo Quinup | Developer & AI Enthusiast',
+    'meta.title': 'Gustavo Quinup | Python Developer, Generative AI & Agents',
     'meta.description':
-      'Portfolio of Gustavo Quinup, Computer Engineer focused on Artificial Intelligence, automation, data and cloud computing.',
+      'Portfolio of Gustavo Quinup, Python Developer and Computer Engineering student focused on generative AI, agents, integrations and automation.',
     'skip': 'Skip to content',
     'nav.about': 'About',
     'nav.projects': 'Projects',
@@ -147,9 +147,9 @@ export const ui = {
     'hero.badge': 'Open to opportunities',
     'hero.hello': "Hi, I'm",
     'hero.iam': "I'm a",
-    'hero.roles': ['Developer', 'Computer Engineer', 'AI Enthusiast'],
+    'hero.roles': ['Python Developer', 'Computer Engineer', 'Generative AI & Agents Developer'],
     'hero.tagline':
-      'I build systems, automations and AI-powered solutions that solve real operational problems, from Python backends to containerized deployments.',
+      'I build generative AI assistants and workflows, agents and system integrations with Python, OpenAI API and FastAPI, from document processing to production deployment.',
     'hero.cta.projects': 'See projects',
     'hero.cta.contact': 'Get in touch',
     'hero.stats.projects': 'projects',

@@ -1,0 +1,39 @@
+title:
+  pt: Pipeline de Análise de Vagas com IA
+  en: AI Job Posting Analysis Pipeline
+summary:
+  pt: Fluxo orientado a eventos que recebe vagas pelo WhatsApp, analisa cada uma com LLM, valida a saída com JSON Schema e publica os resultados no Google Sheets.
+  en: Event-driven workflow that receives job postings through WhatsApp, analyzes each one with an LLM, validates the output with JSON Schema and publishes the results to Google Sheets.
+problem:
+  pt: Vagas recebidas pelo WhatsApp chegam misturadas com outras mensagens e sem padrão, o que torna a triagem manual lenta. O pipeline filtra, interpreta e organiza essas vagas automaticamente.
+  en: Job postings received through WhatsApp arrive mixed with other messages and with no standard format, making manual screening slow. The pipeline filters, interprets and organizes them automatically.
+features:
+  pt:
+    - Recebimento de mensagens do WhatsApp via Evolution API e webhooks.
+    - Orquestração do fluxo no n8n.
+    - Filtragem das mensagens que realmente são vagas.
+    - Análise de cada vaga com LLM.
+    - Validação da resposta do modelo com JSON Schema.
+    - Registro de logs de cada execução.
+    - Publicação dos resultados no Google Sheets.
+    - Execução em VPS Linux.
+  en:
+    - Receives WhatsApp messages through Evolution API and webhooks.
+    - Workflow orchestrated in n8n.
+    - Filters the messages that are actually job postings.
+    - Analyzes each posting with an LLM.
+    - Validates the model output with JSON Schema.
+    - Logs every run.
+    - Publishes results to Google Sheets.
+    - Runs on a Linux VPS.
+metrics:
+  - value: 30–60
+    label:
+      pt: vagas processadas por dia
+      en: job postings processed per day
+category: tool
+status: production
+order: 10.5
+icon: bx-git-branch
+hue: 95
+stack: [n8n, Evolution API, WhatsApp, Webhooks, LLM, JSON Schema, Google Sheets, Linux VPS]
