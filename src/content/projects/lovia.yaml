@@ -2,45 +2,108 @@ title:
   pt: Lovia
   en: Lovia
 summary:
-  pt: Páginas de amor personalizadas com fotos, música, carta, contador de tempo juntos e surpresas, compartilhadas por link ou QR Code.
-  en: Personalized love pages with photos, music, a letter, a time-together counter and surprises, shared by link or QR Code.
+  pt: Plataforma web full stack para criar páginas de amor personalizadas, com editor, autenticação, pagamentos via Mercado Pago e infraestrutura própria em Oracle Cloud ARM.
+  en: Full stack web platform for creating personalized love pages, with an editor, authentication, Mercado Pago payments and self-managed infrastructure on Oracle Cloud ARM.
 problem:
-  pt: Presentes tradicionais nem sempre traduzem a história de um casal. O Lovia transforma fotografias, músicas, mensagens e memórias em uma experiência online personalizada e fácil de compartilhar.
-  en: Traditional gifts don't always capture a couple's story. Lovia turns photos, songs, messages and memories into a personalized online experience that is easy to share.
+  pt: Presentes tradicionais nem sempre traduzem a história de um casal. O Lovia reúne fotografias, músicas, mensagens e momentos especiais em páginas interativas e compartilháveis, oferecendo uma alternativa digital com personalização e planos de publicação.
+  en: Traditional gifts don't always capture a couple's story. Lovia brings photos, songs, messages and special moments together in interactive, shareable pages, offering a digital alternative with customization and publishing plans.
 features:
   pt:
-    - Criação de páginas personalizadas para casais.
-    - Galeria de fotos e apresentação de slides.
+    - Cadastro, autenticação e recuperação de senha.
+    - Editor de páginas românticas com pré-visualização.
+    - Galeria de fotos com otimização automática de imagens.
+    - Cartas e declarações personalizadas.
     - Músicas integradas pelo Spotify.
     - Contador de tempo de relacionamento.
-    - Cartas e mensagens personalizadas.
-    - Linha do tempo com os momentos importantes.
-    - Mapa de lugares especiais.
-    - Quiz do casal e surpresas interativas.
-    - Proteção de páginas ou mensagens por senha.
-    - Compartilhamento por link e QR Code.
-    - Planos comerciais com diferentes períodos de publicação.
+    - Linha do tempo de momentos especiais.
+    - Mapa interativo de memórias e lugares importantes.
+    - Quiz, cartões de relacionamento e outras surpresas interativas.
+    - Temas visuais e animações.
+    - Compartilhamento por URL e QR Code.
+    - Proteção de páginas e mensagens por senha.
+    - Planos com diferentes períodos de validade e pagamento pelo Mercado Pago.
+    - Painel administrativo para usuários, preços, configurações e permissões.
+    - Envio de e-mails e notificações.
+    - Rotinas automáticas de expiração, renovação e limpeza.
+    - Backup incremental e criptografado em servidor secundário.
+    - Monitoramento e verificações de integridade da aplicação.
   en:
-    - Personalized pages for couples.
-    - Photo gallery and slideshow.
+    - Sign up, authentication and password recovery.
+    - Romantic page editor with live preview.
+    - Photo gallery with automatic image optimization.
+    - Personalized letters and messages.
     - Songs embedded from Spotify.
     - Relationship time counter.
-    - Personalized letters and messages.
-    - Timeline of important moments.
-    - Map of special places.
-    - Couple quiz and interactive surprises.
-    - Password protection for pages or messages.
-    - Sharing by link and QR Code.
-    - Paid plans with different publishing periods.
+    - Timeline of special moments.
+    - Interactive map of memories and meaningful places.
+    - Quiz, relationship cards and other interactive surprises.
+    - Visual themes and animations.
+    - Sharing by URL and QR Code.
+    - Password protection for pages and messages.
+    - Plans with different validity periods, paid through Mercado Pago.
+    - Admin dashboard for users, pricing, settings and permissions.
+    - Email delivery and notifications.
+    - Automated expiration, renewal and cleanup routines.
+    - Incremental, encrypted backups to a secondary server.
+    - Monitoring and application health checks.
+metrics:
+  - value: '~630'
+    label:
+      pt: páginas de casal por segundo em teste de carga
+      en: couple pages per second in load testing
+  - value: '~1k'
+    label:
+      pt: requisições por segundo na página inicial
+      en: home page requests per second
+  - value: ~230 MB
+    label:
+      pt: de memória durante o teste
+      en: of memory during the test
+  - value: 1 vCPU
+    label:
+      pt: ambiente usado no benchmark
+      en: benchmark environment
+sections:
+  - title:
+      pt: Arquitetura
+      en: Architecture
+    items:
+      pt:
+        - "Frontend e backend: SvelteKit 3, Svelte 5 e TypeScript."
+        - "Banco de dados: SQLite com better-sqlite3 e Drizzle ORM."
+        - "Autenticação: Argon2id e cookies HTTP-only; validação com Zod."
+        - "Imagens: Sharp com conversão para WebP. Mapas: Leaflet e OpenStreetMap."
+        - "Integrações: Spotify Embed, Mercado Pago Checkout Pro e Resend para e-mails."
+        - "Testes: Vitest e Playwright."
+      en:
+        - "Frontend and backend: SvelteKit 3, Svelte 5 and TypeScript."
+        - "Database: SQLite with better-sqlite3 and Drizzle ORM."
+        - "Authentication: Argon2id and HTTP-only cookies; validation with Zod."
+        - "Images: Sharp with WebP conversion. Maps: Leaflet and OpenStreetMap."
+        - "Integrations: Spotify Embed, Mercado Pago Checkout Pro and Resend for email."
+        - "Testing: Vitest and Playwright."
+  - title:
+      pt: Infraestrutura
+      en: Infrastructure
+    items:
+      pt:
+        - Contêineres Docker gerenciados pelo Coolify em Oracle Cloud ARM, com Cloudflare na frente.
+        - Backup incremental e criptografado com Restic via SFTP, retendo 7 cópias diárias, 4 semanais e 6 mensais.
+        - Monitoramento com Uptime Kuma e Beszel.
+      en:
+        - Docker containers managed by Coolify on Oracle Cloud ARM, behind Cloudflare.
+        - Incremental, encrypted backups with Restic over SFTP, keeping 7 daily, 4 weekly and 6 monthly copies.
+        - Monitoring with Uptime Kuma and Beszel.
 results:
   pt:
-    - Produto público no ar em lovia.gaqtech.dev.
-    - Galeria com até 10 fotos por página.
-    - Planos de 1, 6 e 12 meses.
+    - Plataforma publicada em lovia.gaqtech.dev, com desenvolvimento ativo.
+    - Até 10 fotos por página e 4 modalidades de duração de plano.
   en:
-    - Public product live at lovia.gaqtech.dev.
-    - Gallery with up to 10 photos per page.
-    - 1, 6 and 12 month plans.
+    - Platform live at lovia.gaqtech.dev, under active development.
+    - Up to 10 photos per page and 4 plan duration options.
+notes:
+  pt: Os números de desempenho foram medidos sem o cache do Cloudflare, em um ambiente de 1 vCPU.
+  en: Performance numbers were measured without Cloudflare caching, on a 1 vCPU environment.
 category: app
 status: production
 featured: true
@@ -48,6 +111,6 @@ private: true
 order: 2
 icon: bx-heart
 hue: 345
-stack: [SvelteKit]
+stack: [SvelteKit 3, Svelte 5, TypeScript, SQLite, Drizzle ORM, Argon2id, Zod, Sharp, Leaflet, Mercado Pago, Resend, Vitest, Playwright, Docker, Coolify, Oracle Cloud ARM, Cloudflare, Restic, Uptime Kuma]
 links:
   demo: https://lovia.gaqtech.dev/
