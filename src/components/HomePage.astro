@@ -9,7 +9,7 @@ import Education from './Education.astro';
 import Contact from './Contact.astro';
 import type { Lang } from '../i18n/ui';
 import { useTranslations, homeUrl, allLangs, type Alternates } from '../i18n/utils';
-import { site, experience, education, skillGroups } from '../data/profile';
+import { site, experience, education, skillGroups, skillName } from '../data/profile';
 
 interface Props {
   lang: Lang;
@@ -18,7 +18,7 @@ const { lang } = Astro.props;
 const t = useTranslations(lang);
 const alternates: Alternates = Object.fromEntries(allLangs.map((l) => [l, homeUrl(l)]));
 
-const skills = skillGroups.flatMap((g) => Object.values(g.tiers).flat().map((s) => s!.name));
+const skills = skillGroups.flatMap((g) => Object.values(g.tiers).flat().map((s) => skillName(s!, lang)));
 const jsonLd = [
   {
     '@context': 'https://schema.org',
@@ -27,7 +27,7 @@ const jsonLd = [
     url: site.url,
     image: `${site.url}/og.png`,
     email: `mailto:${site.email}`,
-    jobTitle: lang === 'pt' ? 'Desenvolvedor de Software e Engenheiro de Computação' : 'Software Developer and Computer Engineer',
+    jobTitle: lang === 'pt' ? 'Desenvolvedor Python | IA Generativa, Agentes e Integrações' : 'Python Developer | Generative AI, Agents and Integrations',
     description: t('meta.description'),
     address: { '@type': 'PostalAddress', addressLocality: 'São Paulo', addressRegion: 'SP', addressCountry: 'BR' },
     alumniOf: education.map((e) => ({ '@type': 'EducationalOrganization', name: e.institution })),

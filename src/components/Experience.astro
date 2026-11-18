@@ -27,14 +27,22 @@ const t = useTranslations(lang);
               <header class="tl-header">
                 <span class="tl-period">{job.period[lang]}</span>
                 <h3 class="tl-company">
-                  <a href={job.url} target="_blank" rel="noopener">
-                    {job.company}
-                    <Icon name="bx-link-external" size={16} />
-                  </a>
+                  {
+                    job.url ? (
+                      <a href={job.url} target="_blank" rel="noopener">
+                        {job.company}
+                        <Icon name="bx-link-external" size={16} />
+                      </a>
+                    ) : (
+                      job.company
+                    )
+                  }
+                  {job.location && <span class="tl-location">{job.location}</span>}
                 </h3>
                 <p class="tl-role">{job.role[lang]}</p>
               </header>
               <p class="tl-summary">{job.summary[lang]}</p>
+              {job.groups.length > 0 && (
               <details class="tl-details">
                 <summary>
                   <span class="more">{t('experience.more')}</span>
@@ -54,6 +62,7 @@ const t = useTranslations(lang);
                   ))}
                 </div>
               </details>
+              )}
             </article>
           </li>
         ))
@@ -71,6 +80,7 @@ const t = useTranslations(lang);
   .tl-period { font-family: var(--font-mono); font-size: 0.8rem; color: var(--accent-text); }
   .tl-company { font-size: 1.2rem; margin-top: 4px; }
   .tl-company a { color: var(--text); display: inline-flex; align-items: center; gap: 6px; }
+  .tl-location { display: block; margin-top: 2px; font-family: var(--font-sans); font-size: 0.85rem; font-weight: 400; color: var(--text-faint); }
   .tl-company a :global(.icon) { color: var(--text-faint); }
   .tl-company a:hover { color: var(--accent-text); text-decoration: none; }
   .tl-role { color: var(--text-muted); font-style: italic; margin-top: 4px; font-size: 0.95rem; }

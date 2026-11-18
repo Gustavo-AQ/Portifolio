@@ -59,15 +59,21 @@ const logos = { anhanguera, dominante };
         certifications.map((c) => (
           <li class:list={['card', 'cert', `tone-${c.tone}`]} data-reveal>
             <span class="cert-logo">
-              <Image src={dio} alt={c.issuer} width={40} height={40} densities={[1, 2]} />
+              {c.issuer === 'DIO' ? (
+                <Image src={dio} alt={c.issuer} width={40} height={40} densities={[1, 2]} />
+              ) : (
+                <img src="/img/skills/claude.svg" alt={c.issuer} width="30" height="30" loading="lazy" />
+              )}
             </span>
             <span class="cert-body">
               <strong>{c.name[lang]}</strong>
-              <small>{c.issuer}</small>
+              <small>{[c.issuer, c.date?.[lang], c.hours ? `${c.hours}h` : null].filter(Boolean).join(' · ')}</small>
             </span>
-            <a href={c.url} target="_blank" rel="noopener" class="cert-link" aria-label={`${t('education.cert.view')}: ${c.name[lang]}`}>
-              <Icon name="bx-link-external" size={18} />
-            </a>
+            {c.url && (
+              <a href={c.url} target="_blank" rel="noopener" class="cert-link" aria-label={`${t('education.cert.view')}: ${c.name[lang]}`}>
+                <Icon name="bx-link-external" size={18} />
+              </a>
+            )}
           </li>
         ))
       }
@@ -93,6 +99,7 @@ const logos = { anhanguera, dominante };
   .tone-azure { --tone: #2f8cff; }
   .tone-db { --tone: #ff8a3d; }
   .tone-ml { --tone: #12d640; }
+  .tone-ai { --tone: #a78bfa; }
   .cert-logo { display: grid; place-items: center; width: 48px; height: 48px; border-radius: 12px; background: #fff; flex: none; }
   .cert-logo img { width: 34px; height: 34px; object-fit: contain; }
   .cert-body { display: flex; flex-direction: column; min-width: 0; flex: 1; }
@@ -103,6 +110,9 @@ const logos = { anhanguera, dominante };
 
   @media (min-width: 768px) {
     .edu-grid { grid-template-columns: 1fr 1fr; }
+    .certs { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (min-width: 1100px) {
     .certs { grid-template-columns: repeat(3, 1fr); }
   }
 </style>

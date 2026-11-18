@@ -1,7 +1,8 @@
 ---
 import type { Lang } from '../i18n/ui';
 import { useTranslations } from '../i18n/utils';
-import { skillGroups, methods, spokenLanguages, type Tier } from '../data/profile';
+import Icon from './Icon.astro';
+import { skillGroups, methods, spokenLanguages, skillName, type Tier } from '../data/profile';
 
 interface Props {
   lang: Lang;
@@ -36,10 +37,16 @@ const iconSrc = (icon: string) => (icon.startsWith('/') ? icon : `/img/skills/${
                     <ul class="skill-list">
                       {g.tiers[tier]!.map((s) => (
                         <li class="skill">
-                          <span class="skill-logo">
-                            <img src={iconSrc(s.icon)} alt="" width="22" height="22" loading="lazy" decoding="async" />
-                          </span>
-                          {s.name}
+                          {s.icon ? (
+                            <span class="skill-logo">
+                              <img src={iconSrc(s.icon)} alt="" width="22" height="22" loading="lazy" decoding="async" />
+                            </span>
+                          ) : (
+                            <span class="skill-logo generic">
+                              <Icon name="bx-code-curly" size={16} />
+                            </span>
+                          )}
+                          {skillName(s, lang)}
                         </li>
                       ))}
                     </ul>
@@ -90,6 +97,7 @@ const iconSrc = (icon: string) => (icon.startsWith('/') ? icon : `/img/skills/${
     background: var(--surface-2); border: 1px solid var(--border); font-size: 0.88rem; font-weight: 500;
   }
   .skill-logo { display: grid; place-items: center; width: 30px; height: 30px; border-radius: 50%; background: var(--logo-plate); flex: none; }
+  .skill-logo.generic { background: var(--accent-soft); color: var(--accent-text); }
   .skill-logo img { width: 18px; height: 18px; object-fit: contain; }
   .tags .chip { font-size: 0.88rem; padding: 6px 12px; color: var(--accent-text); background: var(--accent-soft); border-color: rgba(18, 214, 64, 0.25); }
   .langs { list-style: none; display: grid; gap: 8px; }
