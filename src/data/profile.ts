@@ -24,12 +24,12 @@ export const site = {
 export const about: { paragraphs: L<string[]>; facts: { key: 'degree' | 'city' | 'email' | 'born'; value: L }[] } = {
   paragraphs: {
     pt: [
-      'Estudante de Engenharia da Computação (9º semestre, conclusão em 2026) com experiência prática em Legal Tech, automação de processos e Inteligência Artificial.',
+      'Estudante de Engenharia da Computação (10º semestre, conclusão prevista para o final de 2026) com experiência prática em Legal Tech, automação de processos e Inteligência Artificial.',
       'Como Estagiário de Análise de Sistemas na Caique Castro Advocacia, desenvolvi sistemas em produção com Python, FastAPI e OpenAI, incluindo uma plataforma desktop com 6 módulos ativos usada diariamente pelo escritório e um módulo de IA que reduziu em cerca de 70% o tempo de elaboração de petições iniciais, gerando de 50 a 100 documentos por ciclo.',
       'Hoje construo produtos próprios com React, Python, n8n e Docker, hospedados no meu servidor ARM com Coolify.',
     ],
     en: [
-      'Computer Engineering student (9th semester, graduating in 2026) with hands-on experience in Legal Tech, process automation and Artificial Intelligence.',
+      'Computer Engineering student (10th semester, graduating at the end of 2026) with hands-on experience in Legal Tech, process automation and Artificial Intelligence.',
       'As a Systems Analyst Intern at Caique Castro Advocacia, I built production systems with Python, FastAPI and OpenAI, including a desktop platform with 6 active modules used daily by the firm and an AI module that cut the time to draft initial legal petitions by about 70%, generating 50 to 100 documents per cycle.',
       'Today I build my own products with React, Python, n8n and Docker, hosted on my ARM server with Coolify.',
     ],
@@ -60,7 +60,9 @@ export interface ExperienceGroup {
 }
 export interface Experience {
   company: string;
-  url: string;
+  /** Site da empresa (opcional) */
+  url?: string;
+  location?: string;
   period: L;
   role: L;
   summary: L;
@@ -68,6 +70,20 @@ export interface Experience {
 }
 
 export const experience: Experience[] = [
+  {
+    company: 'Rede Américas',
+    location: 'São Paulo, SP',
+    period: { pt: '2026 – atual', en: '2026 – present' },
+    role: {
+      pt: 'Atendimento Receptivo (contrato temporário via Luandre)',
+      en: 'Patient Reception (temporary contract via Luandre)',
+    },
+    summary: {
+      pt: 'Atendimento a pacientes, agendamentos e utilização de sistemas hospitalares.',
+      en: 'Patient service, appointment scheduling and use of hospital systems.',
+    },
+    groups: [],
+  },
   {
     company: 'Caique Castro, Sociedade de Advocacia',
     url: 'https://www.caiquecastro.adv.br/',
@@ -159,7 +175,7 @@ export const education: Education[] = [
     logo: 'anhanguera',
     degree: { pt: 'Bacharelado em Engenharia da Computação', en: "Bachelor's in Computer Engineering" },
     period: { pt: 'Jan 2022 – Previsão 2026', en: 'Jan 2022 – Expected 2026' },
-    note: { pt: '9º semestre', en: '9th semester' },
+    note: { pt: '10º semestre', en: '10th semester' },
     courses: {
       pt: ['Banco de Dados Distribuídos', 'Computação em Nuvem', 'Fundamentos de Algoritmos', 'Hardware e IoT', 'Segurança da Informação'],
       en: ['Distributed Databases', 'Cloud Computing', 'Algorithm Fundamentals', 'Hardware & IoT', 'Information Security'],

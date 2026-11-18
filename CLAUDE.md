@@ -6,6 +6,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 Bilingual (pt-BR default, en) personal portfolio at `me.gaqtech.dev`, built with **Astro 7** as a fully static site and deployed to GitHub Pages through GitHub Actions. Planned later: es and fr locales; possible migration to Next.js on Vercel or to the owner's Oracle ARM server (Coolify, Cloudflare DNS).
 
+Owner-facing editing guide (pt-BR): `COMO-ATUALIZAR.md`. Keep it in sync when data locations change.
+
 ## Commands
 
 ```bash
@@ -58,6 +60,10 @@ public/                    # CNAME, favicon, manifest, robots.txt, og.png, img/,
 Astro i18n with `defaultLocale: 'pt'`, `prefixDefaultLocale: false`. pt lives at `/`, en at `/en/`. Localized path segments: `projetos`/`projects`, `ia`/`ai`. Always build URLs through `src/i18n/utils.ts`. Each page passes `alternates` to `Base` for hreflang tags and the language menu (a `<details>` dropdown that scales to more languages).
 
 To add a locale (es, fr): add it to `languages` and `ui` in `src/i18n/ui.ts`, to `astro.config.mjs` (i18n + sitemap), add the key to the `text`/`list` schemas in `content.config.ts` and to every YAML and `profile.ts` entry, then create `src/pages/<lang>/...` route files mirroring `en/`.
+
+### Experience
+
+`experience` entries in `src/data/profile.ts`: `url` and `location` are optional; `groups: []` hides the "show details" toggle. Newest first.
 
 ### Projects
 

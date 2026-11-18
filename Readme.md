@@ -35,6 +35,8 @@ Requer Node.js 22.12 ou mais novo.
 
 ## Como editar o conteúdo
 
+Guia completo, passo a passo: [COMO-ATUALIZAR.md](COMO-ATUALIZAR.md).
+
 | O quê | Onde |
 |---|---|
 | Projetos | `src/content/projects/<slug>.yaml` (um arquivo por projeto) |

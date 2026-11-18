@@ -36,7 +36,7 @@ export async function buildPortfolioMarkdown(lang: Lang): Promise<string> {
   out.push('');
   for (const job of experience) {
     out.push(`### ${job.role[lang]} | ${job.company}`);
-    out.push(`${job.period[lang]} · ${job.url}`);
+    out.push([job.period[lang], job.location, job.url].filter(Boolean).join(' · '));
     out.push('');
     out.push(job.summary[lang]);
     out.push('');
