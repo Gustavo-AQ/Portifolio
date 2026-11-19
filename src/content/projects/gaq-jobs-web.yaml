@@ -2,43 +2,93 @@ title:
   pt: GAQ Jobs Web
   en: GAQ Jobs Web
 summary:
-  pt: Painel web para gerenciar vagas de emprego encontradas por agentes de IA e acompanhar cada candidatura, integrado ao Grok Bot via n8n e MCP.
-  en: Web dashboard to manage job openings found by AI agents and track each application, integrated with Grok Bot via n8n and MCP.
+  pt: Sistema de busca e acompanhamento de vagas com IA. Um coletor e um pré-filtro em Python descartam cerca de 80% das vagas sem gastar tokens, e só o restante vai para a análise do assistente, que grava tudo no PostgreSQL via n8n e MCP.
+  en: AI-assisted job search and tracking system. A Python collector and pre-filter discard about 80% of postings without spending any tokens, and only the rest reaches the assistant's analysis, which saves everything to PostgreSQL through n8n and MCP.
 problem:
-  pt: As vagas identificadas por agentes de IA ficavam espalhadas em ferramentas diferentes, o que dificultava acompanhar as candidaturas. O GAQ Jobs centraliza tudo em um painel organizado, do primeiro contato ao resultado.
-  en: Job openings found by AI agents were scattered across different tools, making it hard to keep track of applications. GAQ Jobs centralizes everything in one organized dashboard, from first contact to final result.
+  pt: Procurar vagas em vários sites e pedir para uma IA avaliar cada anúncio é lento e gasta muitos tokens com vagas que claramente não servem. O GAQ Jobs automatiza a coleta, elimina por regras simples o que não encaixa no perfil e deixa para a IA só a leitura fina. As vagas aprovadas e cada candidatura ficam organizadas em um painel privado.
+  en: Searching several job boards and asking an AI to evaluate every posting is slow and wastes tokens on jobs that are clearly a poor fit. GAQ Jobs automates collection, drops what doesn't match the profile with simple rules and leaves only the fine-grained reading to the AI. Approved jobs and every application are organized in a private dashboard.
 features:
   pt:
-    - Painel para consultar e gerenciar vagas coletadas por IA.
-    - Integração com o Grok Bot por meio do n8n e MCP.
-    - Filtros por modalidade de trabalho, contrato, aderência e período.
-    - Busca, ordenação e paginação de oportunidades.
-    - Acompanhamento de candidaturas, entrevistas, testes e resultados.
-    - Histórico auditável de mudanças de status.
-    - Login próprio, sessões protegidas e níveis de permissão.
-    - Interface responsiva para computador e celular.
+    - Coletor HTTP sem login que busca vagas em 9 fontes públicas (Gupy, Himalayas, InfoJobs, Catho, Vagas.com.br, NerdIn, backend-br, Programathor e Remotar), respeitando pausas entre pedidos.
+    - Pré-filtro com regras eliminatórias editáveis (nível sênior, idioma obrigatório, horário noturno, local presencial fora da UF, piso salarial e duplicatas) e nota de 0 a 100 por habilidades, área, nível e modelo de trabalho.
+    - Assistente de IA que lê as vagas aprovadas e também posts de recrutadores no LinkedIn, Padrinho e Robô de Vagas, dá a nota de aderência e escolhe as 5 melhores da semana.
+    - Servidor MCP no n8n com 4 ferramentas (salvar_vaga, consultar_vagas, atualizar_status_vaga e descrever_banco) que acessam o banco só por funções PostgreSQL específicas.
+    - Painel web com filtros por modalidade, contrato, aderência e data de coleta, além de busca, ordenação e paginação.
+    - Acompanhamento de candidaturas, entrevistas, testes, ofertas e resultados, com observações pessoais.
+    - Três famílias de status auditáveis (notificação, candidatura e disponibilidade), com histórico de cada mudança.
+    - Login próprio com Argon2id, sessões em cookies protegidos, validação de origem, CSRF e perfis de administrador e somente leitura.
+    - Migrador de schema que verifica e aplica apenas migrações conhecidas, sem apagar dados.
   en:
-    - Dashboard to browse and manage job openings collected by AI.
-    - Integration with Grok Bot through n8n and MCP.
-    - Filters by work model, contract type, fit score and period.
-    - Search, sorting and pagination.
-    - Tracking of applications, interviews, tests and results.
-    - Auditable history of status changes.
-    - Own login, protected sessions and permission levels.
-    - Responsive interface for desktop and mobile.
+    - HTTP collector with no login that fetches jobs from 9 public sources (Gupy, Himalayas, InfoJobs, Catho, Vagas.com.br, NerdIn, backend-br, Programathor and Remotar), with polite delays between requests.
+    - Pre-filter with editable knockout rules (senior level, required language, night shift, on-site outside the state, salary floor and duplicates) and a 0 to 100 score based on skills, area, level and work model.
+    - AI assistant that reads the approved jobs as well as recruiter posts on LinkedIn, Padrinho and Robô de Vagas, assigns a fit score and picks the top 5 of the week.
+    - MCP server in n8n with 4 tools (salvar_vaga, consultar_vagas, atualizar_status_vaga and descrever_banco) that reach the database only through specific PostgreSQL functions.
+    - Web dashboard with filters by work model, contract, fit score and collection date, plus search, sorting and pagination.
+    - Tracking of applications, interviews, tests, offers and results, with personal notes.
+    - Three auditable status families (notification, application and availability), with a history of every change.
+    - Own login with Argon2id, sessions in protected cookies, origin validation, CSRF and admin and read-only roles.
+    - Schema migrator that checks and applies only known migrations, without deleting data.
+metrics:
+  - value: '1235'
+    label:
+      pt: vagas coletadas em uma execução
+      en: jobs collected in one run
+  - value: '246'
+    label:
+      pt: aprovadas pelo pré-filtro para a IA
+      en: passed the pre-filter to the AI
+  - value: '~80%'
+    label:
+      pt: descartadas sem gastar nenhum token
+      en: discarded without spending any tokens
+  - value: '12'
+    label:
+      pt: fontes de vagas (9 por HTTP e 3 pelo navegador)
+      en: job sources (9 over HTTP, 3 in the browser)
+sections:
+  - title:
+      pt: Pipeline
+      en: Pipeline
+    items:
+      pt:
+        - "Fontes públicas (API ou HTML) passam pelo coletor e depois pelo pré-filtro."
+        - "O assistente de IA recebe o que sobrou do pré-filtro e as fontes lidas no navegador, já logado e somente leitura."
+        - "O assistente grava a vaga, a nota de aderência e a nota do pré-filtro pelo servidor MCP do n8n."
+        - "O PostgreSQL (schema empregos) é a fonte única; o painel só lê e atualiza o que já está no banco."
+      en:
+        - "Public sources (API or HTML) go through the collector and then the pre-filter."
+        - "The AI assistant receives what passed the pre-filter plus sources read in the browser, logged in and read-only."
+        - "The assistant saves the job, the fit score and the pre-filter score through the n8n MCP server."
+        - "PostgreSQL (empregos schema) is the single source of truth; the dashboard only reads and updates what is already there."
+  - title:
+      pt: Arquitetura e infraestrutura
+      en: Architecture and infrastructure
+    items:
+      pt:
+        - "Frontend em React 19, TypeScript e Vite, servido por Nginx."
+        - "API em FastAPI com SQLAlchemy e psycopg; o frontend nunca acessa SQL diretamente."
+        - "PostgreSQL 18 com 5 tabelas (vagas, histórico de status, usuários, sessões e tentativas de login), funções MCP e trigger de auditoria."
+        - "Deploy com Docker Compose no Coolify, reaproveitando o PostgreSQL existente no servidor Oracle, com variações gerenciada, independente e de laboratório."
+        - "CI no GitHub Actions com testes do backend (pytest), do coletor e do pré-filtro, build do frontend e validação dos arquivos Compose."
+      en:
+        - "Frontend in React 19, TypeScript and Vite, served by Nginx."
+        - "API in FastAPI with SQLAlchemy and psycopg; the frontend never touches SQL directly."
+        - "PostgreSQL 18 with 5 tables (jobs, status history, users, sessions and login attempts), MCP functions and an audit trigger."
+        - "Deployed with Docker Compose on Coolify, reusing the existing PostgreSQL on the Oracle server, with managed, standalone and lab variants."
+        - "CI on GitHub Actions with backend tests (pytest), collector and pre-filter tests, frontend build and Compose file validation."
 results:
   pt:
-    - Workflow MCP documentado com 4 ferramentas.
-    - Em produção em jobs.gaqtech.dev.
+    - Em produção em jobs.gaqtech.dev, com acesso restrito por login.
+    - Coletor e pré-filtro usam só a biblioteca padrão do Python.
   en:
-    - MCP workflow documented with 4 tools.
-    - In production at jobs.gaqtech.dev.
+    - In production at jobs.gaqtech.dev, with login-restricted access.
+    - Collector and pre-filter use only the Python standard library.
 category: app
 status: production
 order: 10
 icon: bx-briefcase
 hue: 220
-stack: [React, TypeScript, Vite, Python, FastAPI, PostgreSQL 18, Docker Compose, Coolify, n8n, MCP, Argon2id]
+stack: [React 19, TypeScript, Vite, Python, FastAPI, SQLAlchemy, PostgreSQL 18, Argon2id, n8n, MCP, Grok, Docker Compose, Coolify, Nginx, GitHub Actions, pytest]
 links:
   repo: https://github.com/Gustavo-AQ/GAQ-Jobs-Web
   demo: https://jobs.gaqtech.dev/
