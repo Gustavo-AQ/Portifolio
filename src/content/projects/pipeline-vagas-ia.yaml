@@ -31,8 +31,11 @@ metrics:
     label:
       pt: vagas processadas por dia
       en: job postings processed per day
+notes:
+  pt: Fluxo legado e independente. A busca de vagas atual é feita pelo GAQ Jobs Web, com coletor, pré-filtro e servidor MCP.
+  en: Legacy, standalone workflow. Job search is now handled by GAQ Jobs Web, with a collector, pre-filter and MCP server.
 category: tool
-status: production
+status: completed
 order: 10.5
 icon: bx-git-branch
 hue: 95

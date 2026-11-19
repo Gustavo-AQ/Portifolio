@@ -71,8 +71,9 @@ results:
     - Used daily by the legal team.
 category: app
 status: production
+featured: true
 private: true
-order: 8
+order: 2.5
 icon: bx-buildings
 hue: 140
 stack: [Python, PyWebView, OpenAI, LDAP3, Pandas, pdfplumber, python-docx, openpyxl, PyInstaller, HTML/CSS/JS]
