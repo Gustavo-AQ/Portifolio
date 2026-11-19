@@ -85,7 +85,8 @@ results:
     - Collector and pre-filter use only the Python standard library.
 category: app
 status: production
-order: 10
+featured: true
+order: 0.5
 icon: bx-briefcase
 hue: 220
 stack: [React 19, TypeScript, Vite, Python, FastAPI, SQLAlchemy, PostgreSQL 18, Argon2id, n8n, MCP, Grok, Docker Compose, Coolify, Nginx, GitHub Actions, pytest]
