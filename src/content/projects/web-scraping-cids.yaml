@@ -36,8 +36,7 @@ results:
     - Data structured in 4 fields, category code and description plus ICD code and description.
     - Resume logic that avoids reprocessing categories already collected.
 category: tool
-status: production
-featured: true
+status: completed
 order: 7
 icon: bx-spreadsheet
 hue: 120

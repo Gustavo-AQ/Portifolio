@@ -37,8 +37,7 @@ notes:
   pt: Este repositório é uma versão pública do projeto, sem os documentos e configurações internos da organização.
   en: This repository is a public version of the project, without the organization's internal documents and settings.
 category: tool
-status: production
-featured: true
+status: completed
 order: 5
 icon: bx-file-find
 hue: 160
